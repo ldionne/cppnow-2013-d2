@@ -6,7 +6,6 @@
         {"section": "intro"},
         {"section": "resource_deadlocks"},
         {"section": "d2"},
-        {"section": "dyno"},
         {"section": "bonus"}
     ]
 }

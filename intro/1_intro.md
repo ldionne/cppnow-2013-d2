@@ -6,7 +6,14 @@
 <!SLIDE bullets>
 # Overview
 
-* Problem definition: resource deadlocks
+* Resource deadlocks
+    * Definition
+    * State of the art
+
 * d2: A partial solution
-* dyno: A toolbox to ease dynamic analysis
-* bonus material (if we have time)
+    * Usage
+    * Design
+    * Algorithm
+    * Real world examples
+    * Roadmap
+* Bonus material (if we have time)
