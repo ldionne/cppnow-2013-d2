@@ -3,6 +3,10 @@
     "author": "Louis Dionne",
     "venue": "C++Now 2013",
     "sections": [
-        {"section": "opening"}
+        {"section": "intro"},
+        {"section": "resource_deadlocks"},
+        {"section": "d2"},
+        {"section": "dyno"},
+        {"section": "bonus"}
     ]
 }
