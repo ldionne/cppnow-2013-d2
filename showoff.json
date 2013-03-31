@@ -1,0 +1,8 @@
+{
+    "name": "A system for resource deadlock prevention",
+    "author": "Louis Dionne",
+    "venue": "C++Now 2013",
+    "sections": [
+        {"section": "opening"}
+    ]
+}
