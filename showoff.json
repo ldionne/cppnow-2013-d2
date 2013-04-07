@@ -5,7 +5,9 @@
     "sections": [
         {"section": "intro"},
         {"section": "resource_deadlocks"},
-        {"section": "d2"},
+        {"section": "design"},
+        {"section": "usage"},
+        {"section": "algorithm"},
         {"section": "bonus"}
     ]
 }
