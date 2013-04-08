@@ -15,7 +15,6 @@ no labels, no edges, like the basic graph
 
     @@@ cpp
         mutex A, B;
-
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     A; B;
 })
@@ -30,7 +29,6 @@ when an edge is added, we label it with the thread that caused its addition
             A.lock();
             B.lock();
         });
-
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
     A->B [label=t1];
