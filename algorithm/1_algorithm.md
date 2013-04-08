@@ -3,7 +3,10 @@
 
 
 <!SLIDE>
-.notes Specify that we'll be adding annotation on the graph to encode more information like segmentation and gatelocks. Precise that we'll start with the most basic graph and add annotations as we go to improve the algorithm.
+.notes Specify that we'll be adding annotation on the graph to encode more
+information like segmentation and gatelocks. Precise that we'll start with
+the most basic graph and add annotations as we go to improve the algorithm.
+
 the basic idea is to build a graph where:
 
 * vertices represent synchronization objects
