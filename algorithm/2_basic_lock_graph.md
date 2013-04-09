@@ -1,5 +1,6 @@
 <!SLIDE>
-let's start with a basic lock graph where an edge from A to B means B was acquired by some thread holding A
+let's start with a basic lock graph where an edge from A to B means B was
+acquired by some thread holding A
 
 
 <!SLIDE>
@@ -76,7 +77,8 @@ to clarify any ambiguities, consider a graph with more vertices
 
 
 <!SLIDE>
-we're really computing the transitive closure of the "is held by a thread when acquiring X"
+we're really computing the transitive closure of the "is held by a thread
+when acquiring X" relation
 
     @@@ cpp
         mutex A, B, C, D;
