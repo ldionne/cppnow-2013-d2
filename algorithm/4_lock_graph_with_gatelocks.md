@@ -17,8 +17,8 @@ a basic example
 
 
 <!SLIDE>
-.notes It is NOT redundant to put `A` in the set of gatelocks, as is seen in
-the next slide.
+.notes It is NOT redundant to put `A` in the set of gatelocks, as can be seen
+in the next slide.
 
 a basic example
 
@@ -69,17 +69,38 @@ a basic example
         });
 
         thread t2([&] {
-
+            D.lock();
+            A.lock();
+            B.lock();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-
+    A->B [label="t1 holding {A}"];
+    A->C [label="t1 holding {A, B}"];
+    B->C [label="t1 holding {A, B}"];
+    D->A [label="t2 holding {D}"];
+    D->B [label="t2 holding {D, A}"];
+    A->B [label="t2 holding {D, A}"];
 })
 
 
 <!SLIDE>
-.notes Since t1 and t2 will never run in parallel (t1 is joined before t2 is
-created), they obviously can't deadlock
+now consider the previous graph with a false positive
 
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    rankdir=LR;
+    G->A [label="t1 holding {G}"];
+    G->B [label="t1 holding {G, A}"];
+    A->B [label="t1 holding {G, A}"];
+    G->B [label="t2 holding {G}"];
+    G->A [label="t2 holding {G, B}"];
+    B->A [label="t2 holding {G, B}"];
+})
+
+as expected, the false positive is inhibited by the intersecting sets of
+gatelocks
+
+
+<!SLIDE>
 however, consider this situation:
 
     @@@ cpp
@@ -98,3 +119,16 @@ however, consider this situation:
                 A.unlock();
             B.unlock();
         });
+
+
+<!SLIDE>
+yielding this graph
+
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    rankdir=LR;
+    A->B [label="t1 holding {A}"];
+    B->A [label="t2 holding {B}"];
+})
+
+we incorrectly detect a deadlock even though `t1` and `t2` will never run
+in parallel, because `t1` is joined before `t2` starts.
