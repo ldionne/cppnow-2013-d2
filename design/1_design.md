@@ -18,8 +18,12 @@
         d2::basic_lockable
         d2::lockable
         d2::timed_lockable
+        d2::trackable_thread
 
-.notes explain how each wrapper has a mixin counterpart to accomodate every use case.
+.notes explain how each wrapper has a mixin counterpart to accomodate every
+use case, and that trackable_thread is for standard conforming thread
+implementations
+
 
 
 <!SLIDE>
