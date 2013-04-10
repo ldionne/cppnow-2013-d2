@@ -2,7 +2,7 @@
 this time, we will augment the edge labels to record the set of locks held by
 the thread causing an edge to be added to the lock graph.
 
-a cycle is not valid if the gatelock sets of any two edges in the cycles
+a cycle is not valid if the gatelock sets of any two edges in the cycle
 intersect, i.e. if they share one or more gatelocks.
 
 
@@ -119,6 +119,7 @@ however, consider this situation:
                 A.unlock();
             B.unlock();
         });
+        t2.join();
 
 
 <!SLIDE>
@@ -131,4 +132,5 @@ yielding this graph
 })
 
 we incorrectly detect a deadlock even though `t1` and `t2` will never run
-in parallel, because `t1` is joined before `t2` starts.
+in parallel, because `t1` is joined before `t2` starts. we will say that
+`t1` happens before `t2`.

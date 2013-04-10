@@ -3,6 +3,11 @@
 
 
 <!SLIDE>
+# Disclaimer:
+I am not the author of the algorithm. All the references are given at the end.
+
+
+<!SLIDE>
 .notes Specify that we'll be adding annotation on the graph to encode more
 information like segmentation and gatelocks. Precise that we'll start with
 the most basic graph and add annotations as we go to improve the algorithm.
