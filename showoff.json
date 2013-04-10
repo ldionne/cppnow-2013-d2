@@ -3,11 +3,10 @@
     "author": "Louis Dionne",
     "venue": "C++Now 2013",
     "sections": [
-        {"section": "intro"},
-        {"section": "resource_deadlocks"},
-        {"section": "design"},
-        {"section": "usage"},
-        {"section": "algorithm"},
-        {"section": "bonus"}
+        {"section": "1_intro.md"},
+        {"section": "2_about_resource_deadlocks.md"},
+        {"section": "3_state_of_the_art.md"},
+        {"section": "4_d2"},
+        {"section": "5_bonus.md"}
     ]
 }
