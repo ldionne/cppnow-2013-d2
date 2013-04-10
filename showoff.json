@@ -4,7 +4,7 @@
     "venue": "C++Now 2013",
     "sections": [
         {"section": "1_intro.md"},
-        {"section": "2_about_resource_deadlocks.md"},
+        {"section": "2_lock_order_inconsistencies.md"},
         {"section": "3_state_of_the_art.md"},
         {"section": "4_d2"},
         {"section": "5_bonus.md"}

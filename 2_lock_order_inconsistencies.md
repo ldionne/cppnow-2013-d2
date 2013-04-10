@@ -1,0 +1,77 @@
+<!SLIDE subsection>
+# Our target: lock order inconsistencies
+
+
+<!SLIDE>
+# Example \#1
+
+    @@@ cpp
+        mutex A, B;
+        thread t1([&] { // gotta <3 lambdas
+            A.lock();
+                B.lock();
+        });
+
+        thread t2([&] {
+            B.lock();
+                A.lock();
+        });
+
+
+<!SLIDE>
+# Consider what happens if...
+
+1. `t1` starts and locks `A`
+2. `t1` is preempted by the OS
+3. `t2` starts and locks `B`
+4. `t2` tries to lock `A`
+5. `t1` is woken up and tries to lock `B`
+
+
+<!SLIDE>
+# Example \#2
+
+    @@@ cpp
+        mutex A, B, C;
+        thread t1([&] {
+            A.lock();
+                B.lock();
+        });
+
+        thread t2([&] {
+            B.lock();
+                C.lock();
+        });
+
+        thread t3([&] {
+            C.lock();
+                A.lock();
+        });
+
+
+<!SLIDE>
+# Same game, larger headache
+
+
+<!SLIDE>
+# Why are they so vicious?
+
+
+<!SLIDE>
+## They are non deterministic bugs
+
+
+<!SLIDE>
+.notes Very few variations in thread scheduling usually happens for different
+runs of the same code. For this reason, odds are that rare deadlocks still
+make it to production and only happen under "extreme" conditions.
+
+## Rare ones will probably not be caught by unit tests
+
+
+<!SLIDE>
+## They are difficult to reproduce
+
+
+<!SLIDE>
+## Finding them requires thinking about parallel executions, which is difficult
