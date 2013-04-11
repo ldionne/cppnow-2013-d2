@@ -7,8 +7,8 @@
 # Overview
 
 * Our target: lock order inconsistencies
-* State of the art
-* `d2`: A partial solution
+* Alternatives
+* `d2`: a library-based approach
     * Design
     * Algorithm
     * Usage

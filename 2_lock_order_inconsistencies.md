@@ -75,3 +75,7 @@ make it to production and only happen under "extreme" conditions.
 
 <!SLIDE>
 ## Finding them requires thinking about parallel executions, which is difficult
+
+
+<!SLIDE>
+# The real deal is to find them before they happen
