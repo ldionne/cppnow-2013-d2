@@ -114,6 +114,6 @@
 
     $ cd ${boost_root}
 
-    $ patch . ${d2_root}/integrations/boost/1_53_00.patch
+    $ patch -p1 < ${d2_root}/integrations/boost/1_53_00.diff
 
     $ ./bjam -j64 # :)
