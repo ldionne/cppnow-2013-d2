@@ -4,24 +4,24 @@ ignored because the represented deadlock would require code in the same
 thread to run concurrently, which is impossible. This is effectively a
 special case of the happens-before relationship.
 
-now let's augment the lock graph by labelling each edge with the thread that
-caused that edge to be added
+Let's augment the lock graph by labelling each edge with the thread that
+caused that edge to be added.
 
-we will ignore cycles containing two edges labelled with the same thread.
+We will ignore cycles containing two edges labelled with the same thread.
 
 
 <!SLIDE>
-no labels, no edges, like the basic graph
+# Example \#1
+No labels, no edges, like the basic graph.
 
     @@@ cpp
         mutex A, B;
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    A; B;
-})
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
 
 
 <!SLIDE>
-when an edge is added, we label it with the thread that caused its addition
+# Example \#1
+When an edge is added, we label it with the thread that caused its addition.
 
     @@@ cpp
         mutex A, B;
@@ -36,8 +36,9 @@ when an edge is added, we label it with the thread that caused its addition
 
 
 <!SLIDE>
-we add a parallel edge if the label on it is different from that of existing
-edges
+# Example \#1
+We add a parallel edge if the label on it is different from that of existing
+edges.
 
     @@@ cpp
         mutex A, B;
@@ -58,7 +59,7 @@ edges
 
 
 <!SLIDE>
-now consider the previous graph with a false positive
+Now consider the previous graph with a false positive:
 
     @@@ cpp
         mutex A, B;
@@ -69,9 +70,7 @@ now consider the previous graph with a false positive
             A.unlock();
 
             B.lock();
-                A.lock();
-                A.unlock();
-            B.unlock();
+            A.lock();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -79,23 +78,21 @@ now consider the previous graph with a false positive
     B->A [label=t1];
 })
 
-the false positive is no more; the cycle is within a single thread and is
-ignored
+The false positive is no more; the cycle is within a single thread and is
+ignored.
 
 
 <!SLIDE>
 .notes One cycle is ignored because it is single threaded, and the other cycle
 is not ignored, which is good because it represents a potential deadlock.
 
-and cycles still represent potential deadlocks (if you trust me)
+And cycles still represent potential deadlocks (if you trust me).
 
     @@@ cpp
         mutex A, B, C;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
 
         thread t2([&] {
@@ -105,16 +102,12 @@ and cycles still represent potential deadlocks (if you trust me)
             B.unlock();
 
             C.lock();
-                A.lock();
-                A.unlock();
-            C.unlock();
+            A.lock();
         });
 
         thread t3([&] {
             C.lock();
-                A.lock();
-                A.unlock();
-            C.unlock();
+            A.lock();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -126,33 +119,28 @@ and cycles still represent potential deadlocks (if you trust me)
 
 
 <!SLIDE>
-.notes the deadlock may never happen because G has to be held by both threads in order to enter the dangerous section of the code
+.notes The deadlock may never happen because G has to be held by both threads
+in order to enter the dangerous section of the code.
 
-however, consider this situation:
+However, consider this situation:
 
         @@@ cpp
             mutex A, B, G;
             thread t1([&] {
                 G.lock();
-                    A.lock();
-                        B.lock();
-                        B.unlock();
-                    A.unlock();
-                G.lock();
+                A.lock();
+                B.lock();
             });
 
             thread t2([&] {
                 G.lock();
-                    B.lock();
-                        A.lock();
-                        A.unlock();
-                    B.unlock();
-                G.lock();
+                B.lock();
+                A.lock();
             });
 
 
 <!SLIDE>
-yielding this graph:
+Yielding this graph:
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -164,6 +152,6 @@ yielding this graph:
     B->A [label=t2];
 })
 
-we incorrectly find a possible deadlock; in order for the deadlock to happen,
-both threads must be holding `G`, which can't happen at the same time. we say
-that `G` is a 'gatelock' 'protecting' that cycle.
+We incorrectly find a possible deadlock; in order for the deadlock to happen,
+both threads must be holding `G`, which can't happen at the same time. We say
+that `G` is a gatelock protecting that cycle.

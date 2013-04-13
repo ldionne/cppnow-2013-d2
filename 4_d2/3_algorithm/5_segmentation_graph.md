@@ -1,39 +1,35 @@
 <!SLIDE>
-let's introduce the `happens_before` relation for lock acquires:
-
-    @@@ cpp
-        bool happens_before(acquire a, acquire b);
-
-`happens_before` returns true if `a` conceptually happens before `b` in a
-run of a program
+# The happens-before relation
 
 
 <!SLIDE>
-if two acquires do not happen before the other, then they must surely happen
-in parallel
+We can implement this relation by associating an identifier to segments of the
+code that are separated by the start or join of a thread.
 
 
 <!SLIDE>
-we can implement this relation by associating an identifier to segments of the
-code that are separated by the start or join of a thread
+When a thread starts another thread, both the parent and the child threads are
+assigned new segment identifiers.
 
 
 <!SLIDE>
-when a thread starts another thread, both the parent and the child threads are
-assigned new segment identifiers
+When a thread joins another thread, the parent thread continues executing with
+a new segment identifier.
 
 
 <!SLIDE>
-when a thread joins another thread, the parent thread continues executing with
-a new segment identifier
+By drawing directed edges between the segments, we end up with a graph where
+node `v` is reachable from node `u` iff `u` happens before `v`.
 
 
 <!SLIDE>
-by drawing directed edges between the segments, we end up with a graph where
-node `v` is reachable from node `u` iff `u` happens before `v`
+If two acquires do not happen before the other, then they must surely happen
+in parallel.
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
@@ -53,6 +49,8 @@ node `v` is reachable from node `u` iff `u` happens before `v`
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
         thread t2([] {
@@ -81,6 +79,8 @@ node `v` is reachable from node `u` iff `u` happens before `v`
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
         thread t2([] {
@@ -115,6 +115,8 @@ node `v` is reachable from node `u` iff `u` happens before `v`
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
         thread t2([] {
@@ -151,6 +153,8 @@ node `v` is reachable from node `u` iff `u` happens before `v`
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
         thread t2([] {
@@ -189,6 +193,8 @@ node `v` is reachable from node `u` iff `u` happens before `v`
 
 
 <!SLIDE>
+# Example \#1
+
     @@@ cpp
         thread t1([] {});
         thread t2([] {

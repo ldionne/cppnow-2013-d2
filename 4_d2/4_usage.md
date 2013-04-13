@@ -138,6 +138,9 @@
 
 
 <!SLIDE commandline>
+.notes Right now, the integration is only with pthreads because I lack access
+to a windows machine.
+
 # Everything is easier with Boost
 
     $ cd ${boost_root}

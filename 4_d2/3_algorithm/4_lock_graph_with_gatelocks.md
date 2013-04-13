@@ -1,26 +1,24 @@
 <!SLIDE>
-this time, we will augment the edge labels to record the set of locks held by
+This time, we will augment the edge labels to record the set of locks held by
 the thread causing an edge to be added to the lock graph.
 
-a cycle is not valid if the gatelock sets of any two edges in the cycle
+A cycle is not valid if the gatelock sets of any two edges in the cycle
 intersect, i.e. if they share one or more gatelocks.
 
 
 <!SLIDE>
-a basic example
+# Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    A; B; C; D;
-})
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; C; D; })
 
 
 <!SLIDE>
 .notes It is NOT redundant to put `A` in the set of gatelocks, as can be seen
 in the next slide.
 
-a basic example
+# Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -39,7 +37,7 @@ a basic example
 .notes Here, we can see that putting `B` in the set of gatelocks when
 acquiring `C` is not redundant, because the edge from `A` to `C` needs it.
 
-a basic example
+# Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -58,7 +56,7 @@ a basic example
 
 
 <!SLIDE>
-a basic example
+# Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -84,7 +82,7 @@ a basic example
 
 
 <!SLIDE>
-now consider the previous graph with a false positive
+Now consider the previous graph with a false positive:
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -96,34 +94,30 @@ now consider the previous graph with a false positive
     B->A [label="t2 holding {G, B}"];
 })
 
-as expected, the false positive is inhibited by the intersecting sets of
-gatelocks
+As expected, the false positive is inhibited by the intersecting sets of
+gatelocks.
 
 
 <!SLIDE>
-however, consider this situation:
+However, consider this situation:
 
     @@@ cpp
         mutex A, B;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
         t1.join();
 
         thread t2([&] {
             B.lock();
-                A.lock();
-                A.unlock();
-            B.unlock();
+            A.lock();
         });
         t2.join();
 
 
 <!SLIDE>
-yielding this graph
+Yielding this graph:
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -131,6 +125,6 @@ yielding this graph
     B->A [label="t2 holding {B}"];
 })
 
-we incorrectly detect a deadlock even though `t1` and `t2` will never run
-in parallel, because `t1` is joined before `t2` starts. we will say that
+We incorrectly detect a deadlock even though `t1` and `t2` will never run
+in parallel, because `t1` is joined before `t2` starts. We will say that
 `t1` happens before `t2`.

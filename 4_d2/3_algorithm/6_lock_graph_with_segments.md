@@ -1,29 +1,25 @@
 <!SLIDE>
-now, let's augment the lock graph by recording the segment in which an acquire
-is made
+Let's augment the lock graph by recording the segment in which an acquire is
+made.
 
-a cycle is not valid if any edge in the cycle `happens_before` another edge in
-the cycle
+A cycle is not valid if any edge in the cycle happens before another edge in
+the cycle.
 
 
 <!SLIDE>
-let's go back to our false positive
+Let's go back to our false positive:
 
     @@@ cpp
         mutex A, B;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
         t1.join();
 
         thread t2([&] {
             B.lock();
-                A.lock();
-                A.unlock();
-            B.unlock();
+            A.lock();
         });
 
 
@@ -53,9 +49,7 @@ let's go back to our false positive
         mutex A, B;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
@@ -87,9 +81,7 @@ let's go back to our false positive
         mutex A, B;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
         t1.join();
 
@@ -123,17 +115,13 @@ let's go back to our false positive
         mutex A, B;
         thread t1([&] {
             A.lock();
-                B.lock();
-                B.unlock();
-            A.unlock();
+            B.lock();
         });
         t1.join();
 
         thread t2([&] {
             B.lock();
-                A.lock();
-                A.unlock();
-            B.unlock();
+            A.lock();
         });
         t2.join();
 
@@ -170,4 +158,4 @@ let's go back to our false positive
 
 
 <!SLIDE>
-the cycle will be ignored because segment 2 happens before segment 4
+The cycle will be ignored because segment 2 happens before segment 4.

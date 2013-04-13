@@ -1,11 +1,8 @@
 <!SLIDE>
-let's start with a basic lock graph where an edge from A to B means B was
-acquired by some thread holding A
-
-
-<!SLIDE>
 .notes Two nodes are created because we created two locks, but no edges are
 created because we did not lock anything.
+
+# Example \#1
 
     @@@ cpp
         mutex A, B;
@@ -13,7 +10,8 @@ created because we did not lock anything.
 
 
 <!SLIDE>
-no edge is created; the main thread does not hold anything when it acquires A
+# Example \#1
+No edge is created; the main thread does not hold anything when it acquires `A`.
 
     @@@ cpp
         mutex A, B;
@@ -22,7 +20,8 @@ no edge is created; the main thread does not hold anything when it acquires A
 
 
 <!SLIDE>
-the main thread holds A when it acquires B; we add an edge from A to B
+# Example \#1
+The main thread holds `A` when it acquires `B`; we add an edge from `A` to `B`.
 
     @@@ cpp
         mutex A, B;
@@ -32,9 +31,8 @@ the main thread holds A when it acquires B; we add an edge from A to B
 
 
 <!SLIDE>
-.notes We may omit unlock()s in the next slides when they are not relevant.
-
-the graph is not modified on releases
+# Example \#1
+The graph is not modified on releases.
 
     @@@ cpp
         mutex A, B;
@@ -49,7 +47,8 @@ the graph is not modified on releases
 .notes Since there is already an edge from A to B in the graph, we don't add
 it redundantly if a thread locks B again while holding A.
 
-we don't add redundant edges
+# Example \#1
+We don't add redundant edges.
 
     @@@ cpp
         mutex A, B;
@@ -64,7 +63,7 @@ we don't add redundant edges
 
 
 <!SLIDE>
-to clarify any ambiguities, consider a graph with more vertices
+# Example \#2
 
     @@@ cpp
         mutex A, B, C, D;
@@ -77,8 +76,10 @@ to clarify any ambiguities, consider a graph with more vertices
 
 
 <!SLIDE>
-we're really computing the transitive closure of the "is held by a thread
-when acquiring X" relation
+# Example \#2
+
+We're really computing the transitive closure of the "is held by a thread
+when acquiring X" relation.
 
     @@@ cpp
         mutex A, B, C, D;
@@ -94,6 +95,11 @@ when acquiring X" relation
 
 
 <!SLIDE>
+# Example \#2
+
+We're really computing the transitive closure of the "is held by a thread
+when acquiring X" relation.
+
     @@@ cpp
         mutex A, B, C, D;
         A.lock();
@@ -111,10 +117,24 @@ when acquiring X" relation
 
 
 <!SLIDE>
+# A potential deadlock
+
+    @@@ cpp
+    mutex A, B;
+    thread t1([&] {
+        A.lock();
+        B.lock();
+    });
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    A->B;
+})
+
+
+<!SLIDE>
 .notes Clearly, there is a cycle in the graph iff two locks were acquired in
 some order and then acquired in a different order.
 
-let's examine a graph representing a potential deadlock
+# A potential deadlock
 
     @@@ cpp
     mutex A, B;
@@ -134,7 +154,28 @@ let's examine a graph representing a potential deadlock
 
 
 <!SLIDE>
-similarly, with a slightly more complicated example
+# Another potential deadlock
+
+    @@@ cpp
+        mutex A, B, C, D;
+        thread t1([&]{
+            A.lock();
+            B.lock();
+            C.lock();
+            D.lock();
+        });
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    A->B;
+    A->C;
+    B->C;
+    A->D;
+    B->D;
+    C->D;
+})
+
+
+<!SLIDE>
+# Another potential deadlock
 
     @@@ cpp
         mutex A, B, C, D;
@@ -161,8 +202,8 @@ similarly, with a slightly more complicated example
 
 
 <!SLIDE>
-as expected, it works for an arbitrary number of threads
-(you'll have to believe me for more complicated cases :)
+# Yet another
+It works for an arbitrary number of threads (you'll have to believe me :)
 
     @@@ cpp
         mutex A, B, C;
@@ -200,7 +241,7 @@ is taken, the deadlock is 100% to happen. Otherwise, the deadlock won't
 happen and we won't detect anything anyway since the code path was _not_
 taken (and we're doing dynamic analysis).
 
-however, the algorithm can report false positives. consider:
+However, the algorithm can report false positives. Consider:
 
     @@@ cpp
         mutex A, B;
@@ -218,7 +259,7 @@ however, the algorithm can report false positives. consider:
 
 
 <!SLIDE>
-the lock graph will incorrectly report a possible deadlock
+The lock graph will incorrectly report a possible deadlock.
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     A->B;
