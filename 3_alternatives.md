@@ -14,7 +14,7 @@
 * Only possible for trivial programs
 
 
-<!SLIDE bullets incremental>
+<!SLIDE smbullets incremental>
 # Determine a hierarchy among locks and respect it
 
 * Error prone
@@ -27,15 +27,15 @@
 * That's actually a good idea, but it shouldn't be necessary with our approach
 
 
-<!SLIDE bullets incremental>
+<!SLIDE smbullets incremental>
 # Use an algorithm to break deadlocks when they happen
 
-* Runtime overhead required to check for deadlock conditions
-* The policy for breaking deadlocks can't be pretty: kill the thread
+* Overhead required to check for deadlock conditions
+* Policy for breaking deadlocks can't be pretty: kill the thread
 * Misses the point: deadlocks are a bug, not a runtime mishap
 
 
-<!SLIDE bullets incremental>
+<!SLIDE smbullets incremental>
 # Intel® Inspector XE
 
 * Not as flexible as a library-based approach
@@ -45,10 +45,4 @@
 * Exact capabilities unknown (for deadlock detection)
 
 
-<!SLIDE>
-# Coverity® Quality Advisor
-<!--
-    talk about Coverity, if some info can be found for god's sake.
-    it's like they wiped all useful info from their site to give
-    us a marketing talk overdose.
--->
+.notes I dont talk about Coverity because their solution is Java only.
