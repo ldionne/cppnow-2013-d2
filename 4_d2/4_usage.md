@@ -81,16 +81,52 @@
 
     @@@ cpp
         class thread : public d2::trackable_thread_mixin<thread> {
+
+
+<!SLIDE>
+# Second way
+
+    @@@ cpp
             friend class d2::trackable_thread_mixin<thread>;
+
+
+<!SLIDE>
+# Second way
+
+    @@@ cpp
+        private:
             void join_impl();
             void detach_impl();
 
+
+<!SLIDE>
+# Second way
+
+    @@@ cpp
         public:
             template <typename F, typename ...Args>
             explicit thread(F&& f, Args&& ...args) {
                 d2::thread_function<F> f_ =
                             this->get_thread_function(boost::forward<F>(f));
-                // use f_ normally
+                // continue with f_ normally
+            }
+
+<!SLIDE>
+# Second way
+
+    @@@ cpp
+            thread(thread&& other)
+                : trackable_thread_mixin_(boost::move(other))
+            { }
+
+
+<!SLIDE>
+# Second way
+
+    @@@ cpp
+            thread& operator=(thread&& other) {
+                trackable_thread_mixin_::operator=(boost::move(other));
+                // ...
             }
         };
 
