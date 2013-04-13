@@ -3,7 +3,7 @@
 
 
 <!SLIDE>
-# tracking arbitrary synchronization objects
+# Tracking arbitrary synchronization objects
 
     @@@ cpp
         class mutex {
@@ -14,7 +14,7 @@
 
 
 <!SLIDE>
-# first way
+# First way
 
     @@@ cpp
         class untracked_mutex {
@@ -27,7 +27,7 @@
 
 
 <!SLIDE>
-# second way
+# Second way
 
     @@@ cpp
         class mutex : public d2::basic_lockable_mixin<mutex> {
@@ -40,7 +40,7 @@
 
 
 <!SLIDE>
-# 3rd way (if you really have to)
+# Third way (if you really have to)
 
     @@@ cpp
         class mutex : private d2::trackable_sync_object<d2::non_recursive> {
@@ -58,7 +58,16 @@
 
 
 <!SLIDE>
-# tracking standard conforming threads
+# Tracking standard conforming threads
+
+    @@@ cpp
+        class thread {
+            // ...
+        };
+
+
+<!SLIDE>
+# First way
 
     @@@ cpp
         class untracked_thread {
@@ -68,17 +77,36 @@
 
 
 <!SLIDE>
-# tracking threads with arbitrary implementations
+# Second way
+
+    @@@ cpp
+        class thread : public d2::trackable_thread_mixin<thread> {
+            friend class d2::trackable_thread_mixin<thread>;
+            void join_impl();
+            void detach_impl();
+
+        public:
+            template <typename F, typename ...Args>
+            explicit thread(F&& f, Args&& ...args) {
+                d2::thread_function<F> f_ =
+                            this->get_thread_function(boost::forward<F>(f));
+                // use f_ normally
+            }
+        };
+
+
+<!SLIDE>
+# Tracking threads with arbitrary implementations
 
     @@@ cpp
         class thread {
             d2::thread_lifetime lifetime_;
-
             // ...
+        };
 
 
 <!SLIDE>
-# thread birth
+# Thread birth
 
     @@@ cpp
         template <typename Function, typename ...Args>
@@ -90,7 +118,7 @@
 
 
 <!SLIDE>
-# letting go
+# Letting go
 
     @@@ cpp
         void detach() {
@@ -100,7 +128,7 @@
 
 
 <!SLIDE>
-# thread death
+# Thread death
 
     @@@ cpp
         void join() {
@@ -110,7 +138,7 @@
 
 
 <!SLIDE commandline>
-# everything is easier with Boost
+# Everything is easier with Boost
 
     $ cd ${boost_root}
 
