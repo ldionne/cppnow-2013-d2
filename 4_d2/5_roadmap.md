@@ -1,4 +1,4 @@
-<!SLIDE bullets incremental>
+<!SLIDE smbullets incremental>
 # Limitations
 
 * No integration with an IDE
@@ -7,22 +7,10 @@
 
 <!SLIDE smbullets incremental>
 # Roadmap
-
-
-<!SLIDE>
-## Provide better diagnostics
-
-<!SLIDE>
-## Support read/write locks and other synchronization primitives
-
-<!SLIDE>
-## Support detached threads
-
-<!SLIDE>
-## Support lock upgrading/downgrading
-
-<!SLIDE>
-## Consider gatelocks held by parent threads to further reduce false positives
-
-<!SLIDE>
-## Provide integration with more libraries
+* Provide better diagnostics
+* Support read/write locks
+* Support other synchronization primitives
+* Support detached threads
+* Support lock upgrading/downgrading
+* Consider gatelocks held by parent threads to further reduce false positives
+* Provide integration with more libraries
