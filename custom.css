@@ -21,9 +21,8 @@
     float: right;
 }
 
-.segmentation_graph h2 {
-    margin-top: -2em;
-}
+.segmentation_graph h2 { margin-top: -2.2em; }
+.segmentation_graph .sh_sourceCode { font-size: 230%;}
 
 
 .source_code_200P .sh_sourceCode { font-size: 200%; }
