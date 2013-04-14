@@ -1,0 +1,13 @@
+
+#d2_output .result {
+    font-size: 60%;
+}
+
+#d2_output_all .result {
+    font-size: 80%;
+}
+
+#mumbo_jumbo .result {
+    font-size: 60%;
+    word-wrap: break-word;
+}
