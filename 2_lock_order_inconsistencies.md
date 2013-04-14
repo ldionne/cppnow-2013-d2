@@ -3,7 +3,7 @@
 
 
 <!SLIDE>
-# Example \#1
+## Example \#1
 
     @@@ cpp
         mutex A, B;
@@ -18,18 +18,18 @@
         });
 
 
+<!SLIDE smbullets incremental>
+## Consider what happens if...
+
+* `t1` starts and locks `A`
+* `t1` is preempted by the OS
+* `t2` starts and locks `B`
+* `t2` tries to lock `A`
+* `t1` is woken up and tries to lock `B`
+
+
 <!SLIDE>
-# Consider what happens if...
-
-1. `t1` starts and locks `A`
-2. `t1` is preempted by the OS
-3. `t2` starts and locks `B`
-4. `t2` tries to lock `A`
-5. `t1` is woken up and tries to lock `B`
-
-
-<!SLIDE>
-# Example \#2
+## Example \#2
 
     @@@ cpp
         mutex A, B, C;

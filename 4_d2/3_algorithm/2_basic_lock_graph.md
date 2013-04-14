@@ -6,7 +6,10 @@ created because we did not lock anything.
 
     @@@ cpp
         mutex A, B;
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A; B;
+})
 
 
 <!SLIDE graph_example>
@@ -16,7 +19,11 @@ No edge is created; the main thread does not hold anything when it acquires `A`.
     @@@ cpp
         mutex A, B;
         A.lock();
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
+
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A; B;
+})
 
 
 <!SLIDE graph_example>
@@ -28,7 +35,10 @@ The main thread holds `A` when it acquires `B`; we add an edge from `A` to `B`.
         A.lock();
             B.lock();
 
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A->B; })
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A->B;
+})
 
 
 <!SLIDE graph_example>
@@ -41,7 +51,11 @@ The graph is not modified on releases.
             B.lock();
             B.unlock();
         A.unlock();
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A->B; })
+
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A->B;
+})
 
 
 <!SLIDE graph_example>
@@ -59,8 +73,12 @@ We don't add redundant edges.
         A.unlock();
 
         A.lock();
-            B.lock();
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A -> B; })
+        B.lock();
+
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A -> B;
+})
 
 
 <!SLIDE graph_example>
@@ -70,7 +88,9 @@ We don't add redundant edges.
         mutex A, B, C, D;
         A.lock();
         B.lock();
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A; B; C; D;
     A->B;
 })
@@ -87,7 +107,9 @@ when acquiring X" relation.
         A.lock();
         B.lock();
         C.lock();
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A; B; C; D;
     A->B;
     A->C;
@@ -107,7 +129,9 @@ when acquiring X" relation.
         B.lock();
         C.lock();
         D.lock();
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     A->C;
     B->C;
@@ -118,7 +142,7 @@ when acquiring X" relation.
 
 
 <!SLIDE graph_example>
-## A potential deadlock
+## Example \#3: A potential deadlock
 
     @@@ cpp
     mutex A, B;
@@ -126,7 +150,11 @@ when acquiring X" relation.
         A.lock();
         B.lock();
     });
+
+    // ...
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
 })
 
@@ -135,7 +163,7 @@ when acquiring X" relation.
 .notes Clearly, there is a cycle in the graph iff two locks were acquired in
 some order and then acquired in a different order.
 
-## A potential deadlock
+## Example \#3: A potential deadlock
 
     @@@ cpp
     mutex A, B;
@@ -148,14 +176,16 @@ some order and then acquired in a different order.
         B.lock();
         A.lock();
     });
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     B->A;
 })
 
 
 <!SLIDE graph_example>
-## Another potential deadlock
+## Example \# 4: Another potential deadlock
 
     @@@ cpp
         mutex A, B, C, D;
@@ -165,7 +195,11 @@ some order and then acquired in a different order.
             C.lock();
             D.lock();
         });
+
+        // ...
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     A->C;
     B->C;
@@ -176,7 +210,7 @@ some order and then acquired in a different order.
 
 
 <!SLIDE graph_example>
-## Another potential deadlock
+## Example \#4: Another potential deadlock
 
     @@@ cpp
         mutex A, B, C, D;
@@ -191,7 +225,9 @@ some order and then acquired in a different order.
             D.lock();
             B.lock();
         });
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     A->C;
     B->C;
@@ -202,9 +238,8 @@ some order and then acquired in a different order.
 })
 
 
-<!SLIDE reduce_source_code_size graph_example>
-## Yet another
-It works for an arbitrary number of threads (you'll have to believe me :)
+<!SLIDE source_code_270P graph_example>
+## Example \#5: It works for an arbitrary number of threads
 
     @@@ cpp
         mutex A, B, C;
@@ -223,6 +258,7 @@ It works for an arbitrary number of threads (you'll have to believe me :)
             A.lock();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     B->C;
     C->A;
@@ -258,6 +294,7 @@ taken (and we're doing dynamic analysis).
             B.unlock();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
     A->B;
     B->A;
 })

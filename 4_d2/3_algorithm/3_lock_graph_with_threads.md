@@ -11,16 +11,22 @@ We will ignore cycles containing two edges labelled with the same thread.
 
 
 <!SLIDE graph_example>
-## Example \#1
+## Example \#6
 No labels, no edges, like the basic graph.
 
     @@@ cpp
         mutex A, B;
-![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
+
+        // ...
+
+![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
+    graph [bgcolor = transparent];
+    A; B;
+})
 
 
 <!SLIDE graph_example>
-## Example \#1
+## Example \#6
 When an edge is added, we label it with the thread that caused its addition.
 
     @@@ cpp
@@ -29,14 +35,17 @@ When an edge is added, we label it with the thread that caused its addition.
             A.lock();
             B.lock();
         });
+
+        // ...
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    rankdir=LR;
+    graph [bgcolor = transparent, rankdir = LR];
     A->B [label=t1];
 })
 
 
 <!SLIDE graph_example>
-## Example \#1
+## Example \#6
 We add a parallel edge if the label on it is different from that of existing
 edges.
 
@@ -51,15 +60,17 @@ edges.
             A.lock();
             B.lock();
         });
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    rankdir=LR;
+    graph [bgcolor = transparent, rankdir = LR];
     A->B [label=t1];
     A->B [label=t2];
 })
 
 
 <!SLIDE graph_example>
-Now consider the previous graph with a false positive:
+Consider the previous graph with a false positive. We now ignore the single
+threaded cycle:
 
     @@@ cpp
         mutex A, B;
@@ -72,21 +83,20 @@ Now consider the previous graph with a false positive:
             B.lock();
             A.lock();
         });
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    rankdir=LR;
+    graph [bgcolor = transparent, rankdir = LR];
     A->B [label=t1];
     B->A [label=t1];
 })
 
-The false positive is no more; the cycle is within a single thread and is
-ignored.
 
+<!SLIDE graph_example source_code_230P>
+.notes The A->B->C cycle with three different threads is a real potential
+deadlock. The other A->B->C with t1, t2, t2 is a false positive and is ignore
+because t2 appears twice in the cycle.
 
-<!SLIDE graph_example>
-.notes One cycle is ignored because it is single threaded, and the other cycle
-is not ignored, which is good because it represents a potential deadlock.
-
-And cycles still represent potential deadlocks (if you trust me).
+And cycles still represent potential deadlocks.
 
     @@@ cpp
         mutex A, B, C;
@@ -109,8 +119,9 @@ And cycles still represent potential deadlocks (if you trust me).
             C.lock();
             A.lock();
         });
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    rankdir=LR;
+    graph [bgcolor = transparent, rankdir = LR];
     A->B [label=t1];
     B->C [label=t2];
     C->A [label=t2];
@@ -122,7 +133,8 @@ And cycles still represent potential deadlocks (if you trust me).
 .notes The deadlock may never happen because G has to be held by both threads
 in order to enter the dangerous section of the code.
 
-## However, consider this situation:
+However, consider this situation. Both threads must be holding `G`, which
+is impossible:
 
         @@@ cpp
             mutex A, B, G;
@@ -139,7 +151,8 @@ in order to enter the dangerous section of the code.
             });
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    rankdir=LR;
+    graph [bgcolor = transparent];
+    {rank = same; A; B;}
     G->A [label=t1];
     G->B [label=t1];
     A->B [label=t1];
@@ -147,8 +160,6 @@ in order to enter the dangerous section of the code.
     G->A [label=t2];
     B->A [label=t2];
 })
-
-Both threads must be holding `G`, which is impossible.
 
 
 <!SLIDE>

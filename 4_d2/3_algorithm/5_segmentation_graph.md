@@ -27,13 +27,13 @@ If two acquires do not happen before the other, then they must surely happen
 in parallel.
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1;
@@ -48,8 +48,8 @@ in parallel.
 })
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
@@ -57,7 +57,7 @@ in parallel.
             // ...
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1 -> main2;
@@ -78,8 +78,8 @@ in parallel.
 })
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example source_code_230P segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
@@ -87,7 +87,7 @@ in parallel.
             thread t3([] {});
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1 -> main2;
@@ -114,8 +114,8 @@ in parallel.
 })
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example source_code_230P segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
@@ -124,7 +124,7 @@ in parallel.
             t3.join();
         });
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1 -> main2;
@@ -152,8 +152,8 @@ in parallel.
 })
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example source_code_230P segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
@@ -163,7 +163,7 @@ in parallel.
         });
         t1.join();
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1 -> main2 -> main3;
@@ -192,8 +192,8 @@ in parallel.
 })
 
 
-<!SLIDE graph_example>
-## Example \#1
+<!SLIDE graph_example source_code_230P segmentation_graph>
+## Example \#8
 
     @@@ cpp
         thread t1([] {});
@@ -204,7 +204,7 @@ in parallel.
         t1.join();
         t2.join();
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [splines = ortho];
+    graph [bgcolor = transparent, splines = ortho];
     subgraph cluster_main {
         label = "main";
         main0 -> main1 -> main2 -> main3 -> main4;

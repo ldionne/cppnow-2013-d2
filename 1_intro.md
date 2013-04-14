@@ -24,7 +24,7 @@ and threads are joined in reverse order of starting.
 
 
 <!SLIDE>
-# So these are the same:
+## So these are the same:
 
     @@@ cpp
         mutex A, B;
@@ -33,7 +33,7 @@ and threads are joined in reverse order of starting.
             B.unlock();
         A.unlock();
 
-# and
+## and
 
     @@@ cpp
         mutex A, B;
@@ -42,7 +42,7 @@ and threads are joined in reverse order of starting.
 
 
 <!SLIDE>
-# And so are these:
+## And so are these:
 
     @@@ cpp
         thread t1([] {});
@@ -50,7 +50,7 @@ and threads are joined in reverse order of starting.
             t2.join();
         t1.join();
 
-# and
+## and
 
     @@@ cpp
         thread t1([] {});
