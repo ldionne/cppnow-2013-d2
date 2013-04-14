@@ -2,7 +2,7 @@
 # Using `d2`
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Tracking arbitrary synchronization objects
 
     @@@ cpp
@@ -13,7 +13,7 @@
         };
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # First way
 
     @@@ cpp
@@ -26,38 +26,45 @@
         typedef d2::basic_lockable<untracked_mutex> mutex;
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Second way
 
     @@@ cpp
         class mutex : public d2::basic_lockable_mixin<mutex> {
             friend class d2::basic_lockable_mixin<mutex>;
-            void lock_impl();
-            void unlock_impl();
+            void lock_impl() {
+                // normal code
+            }
+
+            void unlock_impl() {
+                // normal code
+            }
         };
 
 .notes explain why this way exists (nested typedef representing the mutex type)
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Third way (if you really have to)
 
     @@@ cpp
-        class mutex : private d2::trackable_sync_object<d2::non_recursive> {
+        class mutex
+            : d2::trackable_sync_object<d2::non_recursive>
+        {
         public:
             void lock() {
-                // ...
+                // normal code
                 this->notify_lock();
             }
 
             void unlock() {
-                // ...
+                // normal code
                 this->notify_unlock();
             }
         };
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Tracking standard conforming threads
 
     @@@ cpp
@@ -66,7 +73,7 @@
         };
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # First way
 
     @@@ cpp
@@ -76,62 +83,70 @@
         typedef d2::trackable_thread<untracked_thread> thread;
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Second way
 
     @@@ cpp
-        class thread : public d2::trackable_thread_mixin<thread> {
-
-
-<!SLIDE>
-# Second way
-
-    @@@ cpp
+        class thread
+            : public d2::trackable_thread_mixin<thread>
+        {
             friend class d2::trackable_thread_mixin<thread>;
+            // ...
 
 
-<!SLIDE>
-# Second way
-
-    @@@ cpp
-        private:
-            void join_impl();
-            void detach_impl();
-
-
-<!SLIDE>
-# Second way
+<!SLIDE smaller>
+# Starting
 
     @@@ cpp
         public:
             template <typename F, typename ...Args>
             explicit thread(F&& f, Args&& ...args) {
-                d2::thread_function<F> f_ =
-                            this->get_thread_function(boost::forward<F>(f));
-                // continue with f_ normally
+                typedef d2::thread_function<F> F_;
+                F_ f_ = this->get_thread_function(
+                                boost::forward<F>(f));
+
+                // normal code using F_ and f_
             }
 
-<!SLIDE>
-# Second way
+
+<!SLIDE smaller>
+# Detaching
 
     @@@ cpp
+        private:
+            void detach_impl() {
+                // normal code
+            }
+
+
+<!SLIDE smaller>
+# Joining
+
+    @@@ cpp
+        private:
+            void join_impl() {
+                // normal code
+            }
+
+
+<!SLIDE smaller>
+# Don't forget these or you'll be sorry
+
+    @@@ cpp
+        public:
             thread(thread&& other)
                 : trackable_thread_mixin_(boost::move(other))
             { }
 
-
-<!SLIDE>
-# Second way
-
-    @@@ cpp
             thread& operator=(thread&& other) {
-                trackable_thread_mixin_::operator=(boost::move(other));
+                trackable_thread_mixin_::operator=(
+                                        boost::move(other));
                 // ...
             }
         };
 
 
-<!SLIDE>
+<!SLIDE smaller>
 # Tracking threads with arbitrary implementations
 
     @@@ cpp
@@ -141,34 +156,34 @@
         };
 
 
-<!SLIDE>
-# Thread birth
+<!SLIDE smaller>
+# Starting
 
     @@@ cpp
-        template <typename Function, typename ...Args>
-        void start(Function&& f, Args&& ...args) {
+        template <typename F, typename ...Args>
+        void start(F&& f, Args&& ...args) {
             lifetime_.about_to_start();
-            d2::thread_function<Function> f_(lifetime_, f);
-            // start the thread with f_ instead of f
+            d2::thread_function<F> f_(lifetime_, f);
+            // normal code with f_
         }
 
 
-<!SLIDE>
-# Letting go
+<!SLIDE smaller>
+# Detaching
 
     @@@ cpp
         void detach() {
-            // ...
+            // normal code
             lifetime_.just_detached();
         }
 
 
-<!SLIDE>
-# Thread death
+<!SLIDE smaller>
+# Joining
 
     @@@ cpp
         void join() {
-            // ...
+            // normal code
             lifetime_.just_joined();
         }
 
@@ -177,7 +192,7 @@
 .notes Right now, the integration is only with pthreads because I lack access
 to a windows machine.
 
-# Everything is easier with Boost
+## Everything is easier with Boost
 
     $ cd ${boost_root}
 

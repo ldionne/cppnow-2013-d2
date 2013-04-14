@@ -27,8 +27,8 @@ If two acquires do not happen before the other, then they must surely happen
 in parallel.
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});
@@ -48,8 +48,8 @@ in parallel.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});
@@ -78,8 +78,8 @@ in parallel.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});
@@ -114,8 +114,8 @@ in parallel.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});
@@ -152,8 +152,8 @@ in parallel.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});
@@ -192,8 +192,8 @@ in parallel.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         thread t1([] {});

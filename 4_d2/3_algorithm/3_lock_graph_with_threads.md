@@ -10,8 +10,8 @@ caused that edge to be added.
 We will ignore cycles containing two edges labelled with the same thread.
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 No labels, no edges, like the basic graph.
 
     @@@ cpp
@@ -19,8 +19,8 @@ No labels, no edges, like the basic graph.
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 When an edge is added, we label it with the thread that caused its addition.
 
     @@@ cpp
@@ -35,8 +35,8 @@ When an edge is added, we label it with the thread that caused its addition.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 We add a parallel edge if the label on it is different from that of existing
 edges.
 
@@ -58,7 +58,7 @@ edges.
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 Now consider the previous graph with a false positive:
 
     @@@ cpp
@@ -82,7 +82,7 @@ The false positive is no more; the cycle is within a single thread and is
 ignored.
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes One cycle is ignored because it is single threaded, and the other cycle
 is not ignored, which is good because it represents a potential deadlock.
 
@@ -118,11 +118,11 @@ And cycles still represent potential deadlocks (if you trust me).
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes The deadlock may never happen because G has to be held by both threads
 in order to enter the dangerous section of the code.
 
-However, consider this situation:
+## However, consider this situation:
 
         @@@ cpp
             mutex A, B, G;
@@ -138,10 +138,6 @@ However, consider this situation:
                 A.lock();
             });
 
-
-<!SLIDE>
-Yielding this graph:
-
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
     G->A [label=t1];
@@ -152,6 +148,8 @@ Yielding this graph:
     B->A [label=t2];
 })
 
-We incorrectly find a possible deadlock; in order for the deadlock to happen,
-both threads must be holding `G`, which can't happen at the same time. We say
-that `G` is a gatelock protecting that cycle.
+Both threads must be holding `G`, which is impossible.
+
+
+<!SLIDE>
+## We say that `G` is a 'gatelock' protecting that cycle

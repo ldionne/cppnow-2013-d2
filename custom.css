@@ -11,3 +11,12 @@
     font-size: 60%;
     word-wrap: break-word;
 }
+
+.graph_example .sh_sourceCode {
+    float: left;
+    width: 40%;
+}
+
+.reduce_source_code_size .sh_sourceCode {
+    font-size: 200%;
+}

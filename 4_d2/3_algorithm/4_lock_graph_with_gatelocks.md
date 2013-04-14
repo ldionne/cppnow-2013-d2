@@ -6,19 +6,19 @@ A cycle is not valid if the gatelock sets of any two edges in the cycle
 intersect, i.e. if they share one or more gatelocks.
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; C; D; })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes It is NOT redundant to put `A` in the set of gatelocks, as can be seen
 in the next slide.
 
-# Example \#1
+## Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -33,11 +33,11 @@ in the next slide.
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes Here, we can see that putting `B` in the set of gatelocks when
 acquiring `C` is not redundant, because the edge from `A` to `C` needs it.
 
-# Example \#1
+## Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -55,8 +55,8 @@ acquiring `C` is not redundant, because the edge from `A` to `C` needs it.
 })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 
     @@@ cpp
         mutex A, B, C, D;
@@ -82,7 +82,7 @@ acquiring `C` is not redundant, because the edge from `A` to `C` needs it.
 
 
 <!SLIDE>
-Now consider the previous graph with a false positive:
+## Now consider the previous graph with a false positive:
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
@@ -98,8 +98,8 @@ As expected, the false positive is inhibited by the intersecting sets of
 gatelocks.
 
 
-<!SLIDE>
-However, consider this situation:
+<!SLIDE reduce_source_code_size graph_example>
+## However, consider this situation:
 
     @@@ cpp
         mutex A, B;
@@ -114,17 +114,14 @@ However, consider this situation:
             A.lock();
         });
         t2.join();
-
-
-<!SLIDE>
-Yielding this graph:
-
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     rankdir=LR;
     A->B [label="t1 holding {A}"];
     B->A [label="t2 holding {B}"];
 })
 
-We incorrectly detect a deadlock even though `t1` and `t2` will never run
-in parallel, because `t1` is joined before `t2` starts. We will say that
-`t1` happens before `t2`.
+`t1` and `t2` will never run in parallel.
+
+
+<!SLIDE>
+## We say that `t1` 'happens-before' `t2`.

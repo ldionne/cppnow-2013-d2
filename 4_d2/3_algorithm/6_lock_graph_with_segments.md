@@ -6,7 +6,7 @@ A cycle is not valid if any edge in the cycle happens before another edge in
 the cycle.
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 Let's go back to our false positive:
 
     @@@ cpp
@@ -23,7 +23,7 @@ Let's go back to our false positive:
         });
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 
     @@@ cpp
         mutex A, B;
@@ -43,7 +43,7 @@ Let's go back to our false positive:
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 
     @@@ cpp
         mutex A, B;
@@ -75,7 +75,7 @@ Let's go back to our false positive:
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 
     @@@ cpp
         mutex A, B;
@@ -109,7 +109,7 @@ Let's go back to our false positive:
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 
     @@@ cpp
         mutex A, B;

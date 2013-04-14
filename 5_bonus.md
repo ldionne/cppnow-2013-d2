@@ -1,8 +1,8 @@
-<!SLIDE subsection>
+<!SLIDE subsection skip>
 # Bonus material
 
 
-<!SLIDE>
+<!SLIDE skip>
 # `dyno`: a toolbox for generating dynamic analysis frameworks
 <!--
     the ultimate goal is to be able to define orthogonal dynamic analysis
@@ -15,11 +15,11 @@
 
 
 
-<!SLIDE>
+<!SLIDE skip>
 # The `hawick_circuits` algorithm
 
 
-<!SLIDE>
+<!SLIDE skip>
 <!-- justify the decision of using _intrusive_ dynamic analysis.
      (integration to _custom_ lock classes; it's relatively easy with
      metaprogramming; we could always write a wrapper to automatically

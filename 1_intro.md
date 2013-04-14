@@ -12,7 +12,6 @@
     * Design
     * Algorithm
     * Usage
-    * Real world examples
     * Roadmap
 
 

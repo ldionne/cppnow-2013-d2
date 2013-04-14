@@ -1,16 +1,16 @@
-<!SLIDE>
+<!SLIDE graph_example>
 .notes Two nodes are created because we created two locks, but no edges are
 created because we did not lock anything.
 
-# Example \#1
+## Example \#1
 
     @@@ cpp
         mutex A, B;
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 No edge is created; the main thread does not hold anything when it acquires `A`.
 
     @@@ cpp
@@ -19,19 +19,20 @@ No edge is created; the main thread does not hold anything when it acquires `A`.
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A; B; })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 The main thread holds `A` when it acquires `B`; we add an edge from `A` to `B`.
 
     @@@ cpp
         mutex A, B;
         A.lock();
             B.lock();
+
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A->B; })
 
 
-<!SLIDE>
-# Example \#1
+<!SLIDE graph_example>
+## Example \#1
 The graph is not modified on releases.
 
     @@@ cpp
@@ -43,11 +44,11 @@ The graph is not modified on releases.
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A->B; })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes Since there is already an edge from A to B in the graph, we don't add
 it redundantly if a thread locks B again while holding A.
 
-# Example \#1
+## Example \#1
 We don't add redundant edges.
 
     @@@ cpp
@@ -62,8 +63,8 @@ We don't add redundant edges.
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph { A -> B; })
 
 
-<!SLIDE>
-# Example \#2
+<!SLIDE graph_example>
+## Example \#2
 
     @@@ cpp
         mutex A, B, C, D;
@@ -75,8 +76,8 @@ We don't add redundant edges.
 })
 
 
-<!SLIDE>
-# Example \#2
+<!SLIDE graph_example>
+## Example \#2
 
 We're really computing the transitive closure of the "is held by a thread
 when acquiring X" relation.
@@ -94,8 +95,8 @@ when acquiring X" relation.
 })
 
 
-<!SLIDE>
-# Example \#2
+<!SLIDE graph_example>
+## Example \#2
 
 We're really computing the transitive closure of the "is held by a thread
 when acquiring X" relation.
@@ -116,8 +117,8 @@ when acquiring X" relation.
 })
 
 
-<!SLIDE>
-# A potential deadlock
+<!SLIDE graph_example>
+## A potential deadlock
 
     @@@ cpp
     mutex A, B;
@@ -130,11 +131,11 @@ when acquiring X" relation.
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes Clearly, there is a cycle in the graph iff two locks were acquired in
 some order and then acquired in a different order.
 
-# A potential deadlock
+## A potential deadlock
 
     @@@ cpp
     mutex A, B;
@@ -153,8 +154,8 @@ some order and then acquired in a different order.
 })
 
 
-<!SLIDE>
-# Another potential deadlock
+<!SLIDE graph_example>
+## Another potential deadlock
 
     @@@ cpp
         mutex A, B, C, D;
@@ -174,8 +175,8 @@ some order and then acquired in a different order.
 })
 
 
-<!SLIDE>
-# Another potential deadlock
+<!SLIDE graph_example>
+## Another potential deadlock
 
     @@@ cpp
         mutex A, B, C, D;
@@ -201,8 +202,8 @@ some order and then acquired in a different order.
 })
 
 
-<!SLIDE>
-# Yet another
+<!SLIDE reduce_source_code_size graph_example>
+## Yet another
 It works for an arbitrary number of threads (you'll have to believe me :)
 
     @@@ cpp
@@ -228,7 +229,7 @@ It works for an arbitrary number of threads (you'll have to believe me :)
 })
 
 
-<!SLIDE>
+<!SLIDE graph_example>
 .notes Since there is only one thread involved, a deadlock can't possibly
 happen. Actually, the generalization is that all the code in this thread is
 implicitly serialized (because it is run in a single thread of execution).
@@ -241,7 +242,7 @@ is taken, the deadlock is 100% to happen. Otherwise, the deadlock won't
 happen and we won't detect anything anyway since the code path was _not_
 taken (and we're doing dynamic analysis).
 
-However, the algorithm can report false positives. Consider:
+## However, the algorithm can report false positives. Consider:
 
     @@@ cpp
         mutex A, B;
@@ -256,11 +257,6 @@ However, the algorithm can report false positives. Consider:
                 A.unlock();
             B.unlock();
         });
-
-
-<!SLIDE>
-The lock graph will incorrectly report a possible deadlock.
-
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
     A->B;
     B->A;
