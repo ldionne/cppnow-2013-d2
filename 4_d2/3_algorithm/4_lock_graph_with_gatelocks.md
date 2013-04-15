@@ -15,7 +15,7 @@ intersect, i.e. if they share one or more gatelocks.
         // ...
 
 ![](https://chart.googleapis.com/chart?cht=gv&chl=digraph {
-    graph [bgcolor = transparent];
+    graph [bgcolor = transparent, rankdir = LR];
     A; B; C; D;
 })
 
