@@ -165,7 +165,7 @@ in parallel.
     subgraph cluster_t1 {
         label = "t1";
         main0 -> t10;
-        t10 [label = 2];
+        t10 [label = s2];
     }
     subgraph cluster_t2 {
         label = "t2";
