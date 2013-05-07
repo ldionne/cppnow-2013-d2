@@ -3,6 +3,48 @@
 
 
 <!SLIDE>
+## A note for the rest of the presentation:
+
+For brevity, unlocking mutexes and joining threads will often be omitted.
+When omitted, assume the mutexes are unlocked in reverse order of locking
+and threads are joined in reverse order of starting.
+
+
+<!SLIDE>
+## So these are the same:
+
+    @@@ cpp
+        mutex A, B;
+        A.lock();
+            B.lock();
+            B.unlock();
+        A.unlock();
+
+## and
+
+    @@@ cpp
+        mutex A, B;
+        A.lock();
+            B.lock();
+
+
+<!SLIDE>
+## And so are these:
+
+    @@@ cpp
+        thread t1([] {});
+            thread t2([] {});
+            t2.join();
+        t1.join();
+
+## and
+
+    @@@ cpp
+        thread t1([] {});
+            thread t2([] {});
+
+
+<!SLIDE>
 # Disclaimer:
 I am __not__ the author of the algorithm. It is presented in:
 
