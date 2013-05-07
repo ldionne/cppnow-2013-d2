@@ -2,6 +2,12 @@
 # Design and usage
 
 
+<!SLIDE bullets incremental>
+## `d2` needs to record 4 types of events
+* Lock acquire and release
+* Thread start and join
+
+
 <!SLIDE smaller>
 ## High level API with concepts from Boost.Thread
 
