@@ -39,6 +39,15 @@
 
 
 <!SLIDE smaller>
+## All wrappers have a recursive counterpart
+
+    @@@ cpp
+        d2::recursive_basic_lockable
+        d2::recursive_lockable
+        d2::recursive_timed_lockable
+
+
+<!SLIDE smaller>
 ## You can also bypass the concept based API
 
     @@@ cpp
@@ -56,15 +65,6 @@
             this->notify_unlock();
           }
         };
-
-
-<!SLIDE smaller>
-## All wrappers have a recursive counterpart
-
-    @@@ cpp
-        d2::recursive_basic_lockable
-        d2::recursive_lockable
-        d2::recursive_timed_lockable
 
 
 <!SLIDE smaller>
