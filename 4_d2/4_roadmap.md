@@ -9,10 +9,8 @@
 
 <!SLIDE smbullets incremental>
 # Roadmap
+* Support a wider set of synchronization primitives
 * Provide better diagnostics
-* Support read/write locks
-* Support other synchronization primitives
 * Support detached threads
-* Support lock upgrading/downgrading
 * Consider gatelocks held by parent threads to further reduce false positives
 * Provide integration with more libraries
