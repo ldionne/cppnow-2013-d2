@@ -3,6 +3,15 @@
 
 
 <!SLIDE>
+# Disclaimer:
+I am __not__ the author of the algorithm. It is presented in:
+
+"Detection of deadlock potentials in multithreaded programs",
+IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15,
+Sept.-Oct. 2010
+
+
+<!SLIDE>
 ## A note for the rest of the presentation:
 
 For brevity, unlocking mutexes and joining threads will often be omitted.
@@ -42,15 +51,6 @@ and threads are joined in reverse order of starting.
     @@@ cpp
         thread t1([] {});
             thread t2([] {});
-
-
-<!SLIDE>
-# Disclaimer:
-I am __not__ the author of the algorithm. It is presented in:
-
-"Detection of deadlock potentials in multithreaded programs",
-IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15,
-Sept.-Oct. 2010
 
 
 <!SLIDE smbullets incremental>
