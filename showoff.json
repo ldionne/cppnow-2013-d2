@@ -5,7 +5,7 @@
     "sections": [
         {"section": "1_intro.md"},
         {"section": "2_lock_order_inconsistencies.md"},
-        {"section": "3_alternative_solutions.md"},
+        {"section": "3_existing_solutions.md"},
         {"section": "4_d2"},
         {"section": "5_bonus.md"},
         {"section": "6_conclusion.md"}

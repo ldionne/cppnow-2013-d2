@@ -1,5 +1,5 @@
 <!SLIDE subsection>
-# Alternative solutions
+# Existing solutions
 
 
 <!SLIDE bullets incremental>
