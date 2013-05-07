@@ -16,8 +16,8 @@
 
     @@@ cpp
         struct untracked_mutex {
-            void lock();
-            void unlock();
+          void lock();
+          void unlock();
         };
 
         typedef d2::basic_lockable<untracked_mutex> mutex;
@@ -30,11 +30,11 @@
 
     @@@ cpp
         class mutex
-            : public d2::basic_lockable_mixin<mutex>
+          : public d2::basic_lockable_mixin<mutex>
         {
-            friend class d2::basic_lockable_mixin<mutex>;
-            void lock_impl();
-            void unlock_impl();
+          friend class d2::basic_lockable_mixin<mutex>;
+          void lock_impl();
+          void unlock_impl();
         };
 
 
@@ -43,18 +43,18 @@
 
     @@@ cpp
         class mutex
-            : d2::trackable_sync_object<d2::non_recursive>
+          : d2::trackable_sync_object<d2::non_recursive>
         {
         public:
-            void some_method_to_lock() {
-                // normal code
-                this->notify_lock();
-            }
+          void some_method_to_lock() {
+            // normal code
+            this->notify_lock();
+          }
 
-            void some_method_to_unlock() {
-                // normal code
-                this->notify_unlock();
-            }
+          void some_method_to_unlock() {
+            // normal code
+            this->notify_unlock();
+          }
         };
 
 
@@ -72,7 +72,7 @@
 
     @@@ cpp
         struct untracked_thread {
-            // ...
+          // ...
         };
 
         typedef d2::standard_thread<untracked_thread> thread;
@@ -83,11 +83,11 @@
 
     @@@ cpp
         class thread
-            : public d2::standard_thread_mixin<thread>
+          : public d2::standard_thread_mixin<thread>
         {
-            friend class d2::standard_thread_mixin<thread>;
-            void detach_impl();
-            void join_impl();
+          friend class d2::standard_thread_mixin<thread>;
+          void detach_impl();
+          void join_impl();
         };
 
 
@@ -97,11 +97,11 @@
     @@@ cpp
         template <typename F, typename ...Args>
         explicit thread(F&& f, Args&& ...args) {
-            typedef d2::thread_function<F> F_;
-            F_ f_ = this->get_thread_function(
-                            boost::forward<F>(f));
+          typedef d2::thread_function<F> F_;
+          F_ f_ = this->get_thread_function(
+                          boost::forward<F>(f));
 
-            // normal code using F_ and f_
+          // normal code using F_ and f_
         }
 
 
@@ -110,18 +110,18 @@
 
     @@@ cpp
         thread(thread&& other)
-            : standard_thread_mixin_(boost::move(other))
+          : standard_thread_mixin_(boost::move(other))
         { }
 
         thread& operator=(thread&& other) {
-            standard_thread_mixin_::operator=(boost::move(other));
-            // ...
+          standard_thread_mixin_::operator=(boost::move(other));
+          // ...
         }
 
         friend void swap(thread& a, thread& b) {
-            swap(static_cast<standard_thread_mixin_&>(a),
-                 static_cast<standard_thread_mixin_&>(b));
-            ...
+          swap(static_cast<standard_thread_mixin_&>(a),
+               static_cast<standard_thread_mixin_&>(b));
+          // ...
         }
 
 
@@ -131,23 +131,23 @@
     @@@ cpp
         class thread : d2::trackable_thread<thread> {
         public:
-            template <typename F, typename ...Args>
-            void some_method_to_start(F&& f, Args&& ...args) {
-                typedef d2::thread_function<F> F_;
-                F_ f_ = this->get_thread_function(f);
+          template <typename F, typename ...Args>
+          void some_method_to_start(F&& f, Args&& ...args) {
+            typedef d2::thread_function<F> F_;
+            F_ f_ = this->get_thread_function(f);
 
-                // normal code using F_ and f_
-            }
+            // normal code using F_ and f_
+          }
 
-            void some_method_to_join() {
-                // normal code
-                this->notify_join();
-            }
+          void some_method_to_join() {
+            // normal code
+            this->notify_join();
+          }
 
-            void some_method_to_detach() {
-                // normal code
-                this->notify_detach();
-            }
+          void some_method_to_detach() {
+            // normal code
+            this->notify_detach();
+          }
         };
 
 
