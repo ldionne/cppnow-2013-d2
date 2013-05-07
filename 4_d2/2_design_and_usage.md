@@ -32,7 +32,7 @@
         class mutex
           : public d2::basic_lockable_mixin<mutex>
         {
-          friend class d2::basic_lockable_mixin<mutex>;
+          friend class d2::access;
           void lock_impl();
           void unlock_impl();
         };
@@ -85,7 +85,7 @@
         class thread
           : public d2::standard_thread_mixin<thread>
         {
-          friend class d2::standard_thread_mixin<thread>;
+          friend class d2::access;
           void detach_impl();
           void join_impl();
         };
