@@ -1,8 +1,10 @@
 <!SLIDE smbullets incremental>
-# Limitations
+# Limitations and drawbacks
 
+* Requires modifying existing code
 * No integration with an IDE
 * Meaningful diagnostics is difficult and possibly impossible in release builds
+* Current implementation is immature
 
 
 <!SLIDE smbullets incremental>
