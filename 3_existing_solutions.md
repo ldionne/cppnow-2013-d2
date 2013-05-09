@@ -2,42 +2,42 @@
 # Existing solutions
 
 
-<!SLIDE bullets incremental>
-# Do nothing
+<!SLIDE smbullets incremental>
+## Do nothing
 
 * Not a great solution
 
 
-<!SLIDE bullets incremental>
-# Never hold more than one lock at once
+<!SLIDE smbullets incremental>
+## Never hold more than one lock at once
 
 * Not realistic for non-trivial programs
 
 
-<!SLIDE bullets incremental>
-# Determine a hierarchy among locks and respect it
+<!SLIDE smbullets incremental>
+## Determine a hierarchy among locks and respect it
 
 * Error-prone
 * Not realistic for non-trivial programs
 
 
-<!SLIDE bullets incremental>
-# Disturb thread scheduling to provoke hidden deadlocks
+<!SLIDE smbullets incremental>
+## Disturb thread scheduling to provoke hidden deadlocks
 
 * Requires several runs of the program
 * Good idea that could be mixed with other approaches
 
 
-<!SLIDE bullets incremental>
-# Use an algorithm to break deadlocks when they happen
+<!SLIDE smbullets incremental>
+## Use an algorithm to break deadlocks when they happen
 
 * Overhead required to check for deadlock conditions
 * Policy for breaking deadlocks can't be pretty: kill the thread
 * Misses the point: deadlocks are a bug, not a runtime mishap
 
 
-<!SLIDE bullets incremental>
-# Intel® Inspector XE
+<!SLIDE smbullets incremental>
+## Intel® Inspector XE
 
 * Detects deadlocks involving up to 4 threads only
 * Huge overhead
@@ -45,12 +45,12 @@
 * Exact capabilities for deadlock detection unknown
 
 
-<!SLIDE bullets incremental>
-# Valgrind (Helgrind)
+<!SLIDE smbullets incremental>
+## Valgrind (Helgrind)
 
 * Runs the program on a virtual processor, one thread at a time
 * Limited to POSIX pthreads threading primitives
 
 
 <!SLIDE bullets incremental>
-# There are also several solutions for the JVM
+## There are also several solutions for the JVM

@@ -7,7 +7,8 @@
         {"section": "2_lock_order_inconsistencies.md"},
         {"section": "3_existing_solutions.md"},
         {"section": "4_d2"},
-        {"section": "5_bonus.md"},
-        {"section": "6_conclusion.md"}
+        {"section": "5_dyno.md"},
+        {"section": "6_bonus.md"},
+        {"section": "7_conclusion.md"}
     ]
 }

@@ -8,6 +8,14 @@
 * Thread start and join
 
 
+<!SLIDE bullets incremental>
+## Why intrusive?
+
+* Easier to implement (main reason)
+* Could write a wrapper to automatically instrument code
+* Custom synchronization objects
+
+
 <!SLIDE smaller>
 ## High level API with concepts from Boost.Thread
 
