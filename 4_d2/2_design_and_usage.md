@@ -29,7 +29,7 @@
         typedef d2::basic_lockable<untracked_mutex> mutex;
 
 
-<!SLIDE smaller>
+<!SLIDE smaller skip>
 .notes explain why this exists (nested typedef representing the mutex type)
 
 ## You can also use a mixin to achieve the same effect
@@ -84,7 +84,7 @@
         typedef d2::standard_thread<untracked_thread> thread;
 
 
-<!SLIDE smaller>
+<!SLIDE smaller skip>
 ## A mixin is also available
 
     @@@ cpp
@@ -97,7 +97,7 @@
         };
 
 
-<!SLIDE smaller>
+<!SLIDE smaller skip>
 ## When using the mixin, the constructor has to be tweaked
 
     @@@ cpp
@@ -111,7 +111,7 @@
         }
 
 
-<!SLIDE smaller>
+<!SLIDE smaller skip>
 ## Don't forget to modify these or you'll be sorry
 
     @@@ cpp
@@ -158,7 +158,7 @@
 
 
 <!SLIDE smaller>
-## Again, don't forget to modify these
+## Don't forget to modify these
 
     @@@ cpp
         thread(thread&& other);
