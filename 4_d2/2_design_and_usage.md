@@ -198,27 +198,21 @@ Also mention that this output was cropped and edited a bit for clarity.
 ## `d2tool` speaks that mumbo jumbo
 
     $ d2tool --analyze myprogram
-    in thread #2 started at [no location information]:
-    holds object #1 acquired at
-    scenario_ABBA            main::$_1::operator()() const
-    ...
+    in thread #X started at [location]:
+      holds object #Y acquired at [location]
+      holds object #Z acquired at [location]
+      ...
+      tries to acquire object #W at [location]
 
-    tries to acquire object #0 at
-    scenario_ABBA            main::$_1::operator()() const
-    ...
-
-    in thread #1 started at [no location information]:
-    holds object #0 acquired at
-    scenario_ABBA            main::$_0::operator()() const
-    ...
-
-    tries to acquire object #1 at
-    scenario_ABBA            main::$_0::operator()() const
-    ...
+    in thread #XX started at [location]:
+      holds object #YY acquired at [location]
+      holds object #ZZ acquired at [location]
+      ...
+      tries to acquire object #WW at [location]
 
 
 <!SLIDE #d2_output commandline>
-## `d2tool` speaks that mumbo jumbo
+## where each [location] is a complete call stack:
 
     $ d2tool --analyze myprogram
     in thread #2 started at [no location information]:
@@ -232,3 +226,11 @@ Also mention that this output was cropped and edited a bit for clarity.
     [...]/libboost_thread-mt.dylib thread_proxy
     [...]/libsystem_c.dylib        _pthread_start
     [...]/libsystem_c.dylib        thread_start
+    ...
+
+
+<!SLIDE bullets incremental>
+## Current limitations:
+
+* Output is not as nicely formatted
+* Thread starts have no location information
