@@ -3,12 +3,6 @@
 
 
 <!SLIDE smbullets incremental>
-## Do nothing
-
-* Not a great solution
-
-
-<!SLIDE smbullets incremental>
 ## Never hold more than one lock at once
 
 * Not realistic for non-trivial programs
