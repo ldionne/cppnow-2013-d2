@@ -11,23 +11,24 @@
 <!SLIDE bullets incremental>
 # Never hold more than one lock at once
 
-* Only possible for trivial programs
+* Not realistic for non-trivial programs
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE bullets incremental>
 # Determine a hierarchy among locks and respect it
 
-* Error prone
-* Can be impossible for complex programs
+* Error-prone
+* Not realistic for non-trivial programs
 
 
 <!SLIDE bullets incremental>
 # Disturb thread scheduling to provoke hidden deadlocks
 
-* That's actually a good idea, but it shouldn't be necessary with our approach
+* Requires several runs of the program
+* Good idea that could be mixed with other approaches
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE bullets incremental>
 # Use an algorithm to break deadlocks when they happen
 
 * Overhead required to check for deadlock conditions
@@ -35,14 +36,21 @@
 * Misses the point: deadlocks are a bug, not a runtime mishap
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE bullets incremental>
 # Intel® Inspector XE
 
-* Not as flexible as a library-based approach
-* Huge overhead
 * Detects deadlocks involving up to 4 threads only
-* Proprietary
-* Exact capabilities unknown (for deadlock detection)
+* Huge overhead
+* Proprietary and costly license
+* Exact capabilities for deadlock detection unknown
 
 
-.notes I dont talk about Coverity because their solution is Java only.
+<!SLIDE bullets incremental>
+# Valgrind (Helgrind)
+
+* Runs the program on a virtual processor, one thread at a time
+* Limited to POSIX pthreads threading primitives
+
+
+<!SLIDE bullets incremental>
+# There are also several solutions for the JVM
