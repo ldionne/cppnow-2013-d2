@@ -1261,6 +1261,95 @@ the cycle.</p>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/6_lock_graph_with_segments/10">
 <p>The cycle will be ignored because segment 2 happens before segment 4.</p>
 </div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/7_summary/1">
+<h1>Summary of the algorithm</h1>
+</div>
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/2">
+<h2>The lock graph is a directed multigraph</h2>
+
+<ul>
+<li>Vertices represent synchronization objects</li>
+<li>An edge from <code>u</code> to <code>v</code> means that a thread acquired <code>v</code> while holding <code>u</code></li>
+<li>A cycle in the graph represents a potential deadlock</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/3">
+<h2>The segmentation graph is a directed acyclic graph</h2>
+
+<ul>
+<li>Vertices represent segments of code separated by <code>start</code>s and <code>join</code>s</li>
+<li>A path from <code>u</code> to <code>v</code> means that <code>u</code> happens before <code>v</code></li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/4">
+<h2>We label each edge of the lock graph with</h2>
+
+<ul>
+<li>The thread that performed the acquire</li>
+<li>The set of locks held by the thread ("gatelocks")</li>
+<li>The code segment in which the acquire is performed</li>
+</ul>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/7_summary/5">
+<h2>To reduce false positives, we ignore a cycle if...</h2>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/6">
+<h2>Any two edges are in the same thread</h2>
+
+<pre class="sh_cpp"><code>    mutex A, B;
+    thread t1([&amp;] {
+      A.lock();
+        B.lock();
+        B.unlock();
+      A.unlock();
+
+      B.lock();
+        A.lock();
+        A.unlock();
+      B.unlock();
+    });</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/7">
+<h2>Any two edges share common "gatelocks"</h2>
+
+<pre class="sh_cpp"><code>    mutex A, B, G;
+    thread t1([&amp;] {
+      G.lock();
+        A.lock();
+          B.lock();
+          B.unlock();
+        A.unlock();
+      G.unlock();
+    });
+
+    thread t2([&amp;] {
+      G.lock();
+        B.lock();
+          A.lock();
+          A.unlock();
+        B.unlock();
+      G.unlock();
+    });</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/8">
+<h2>Any edge happens before any other edge in the cycle</h2>
+
+<pre class="sh_cpp"><code>    mutex A, B;
+    thread t1([&amp;] {
+      A.lock();
+        B.lock();
+        B.unlock();
+      A.unlock();
+    });
+    t1.join();
+
+    thread t2([&amp;] {
+      B.lock();
+        A.lock();
+        A.unlock();
+      B.unlock();
+    });</code></pre>
+</div>
 </div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/4_roadmap/1">
 <h1>Limitations and drawbacks</h1>
 
