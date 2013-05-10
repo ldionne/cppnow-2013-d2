@@ -1,0 +1,37 @@
+
+#d2_output .result {
+    font-size: 60%;
+}
+
+#d2_output_all .result {
+    font-size: 80%;
+}
+
+#mumbo_jumbo .result {
+    font-size: 60%;
+    word-wrap: break-word;
+}
+
+
+.graph_example .sh_sourceCode {
+    float: left;
+}
+
+.graph_example img {
+    float: right;
+}
+
+.segmentation_graph h2 { margin-top: -2.2em; }
+.segmentation_graph .sh_sourceCode { font-size: 230%;}
+
+
+.source_code_200P .sh_sourceCode { font-size: 200%; }
+.source_code_210P .sh_sourceCode { font-size: 210%; }
+.source_code_220P .sh_sourceCode { font-size: 220%; }
+.source_code_230P .sh_sourceCode { font-size: 230%; }
+.source_code_240P .sh_sourceCode { font-size: 240%; }
+.source_code_250P .sh_sourceCode { font-size: 250%; }
+.source_code_260P .sh_sourceCode { font-size: 260%; }
+.source_code_270P .sh_sourceCode { font-size: 270%; }
+.source_code_280P .sh_sourceCode { font-size: 280%; }
+.source_code_290P .sh_sourceCode { font-size: 290%; }
