@@ -44,7 +44,3 @@
 
 * Runs the program on a virtual processor, one thread at a time
 * Limited to POSIX pthreads threading primitives
-
-
-<!SLIDE bullets incremental>
-## There are also several solutions for the JVM

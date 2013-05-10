@@ -3,18 +3,18 @@
 
 
 <!SLIDE>
-# Disclaimer:
+# Disclaimer
 I am __not__ the author of the algorithm. It is presented in:
 
-"Detection of deadlock potentials in multithreaded programs",
-IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15,
+"Detection of deadlock potentials in multithreaded programs"<br>
+IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15<br>
 Sept.-Oct. 2010
 
 
 <!SLIDE>
 ## A note for the rest of the presentation:
 
-For brevity, unlocking mutexes and joining threads will often be omitted.
+For brevity, unlocking mutexes and joining threads will often be omitted.<br>
 When omitted, assume the mutexes are unlocked in reverse order of locking
 and threads are joined in reverse order of starting.
 
@@ -25,8 +25,8 @@ and threads are joined in reverse order of starting.
     @@@ cpp
         mutex A, B;
         A.lock();
-            B.lock();
-            B.unlock();
+        B.lock();
+        B.unlock();
         A.unlock();
 
 ## and
@@ -34,7 +34,7 @@ and threads are joined in reverse order of starting.
     @@@ cpp
         mutex A, B;
         A.lock();
-            B.lock();
+        B.lock();
 
 
 <!SLIDE>
@@ -42,15 +42,15 @@ and threads are joined in reverse order of starting.
 
     @@@ cpp
         thread t1([] {});
-            thread t2([] {});
-            t2.join();
+        thread t2([] {});
+        t2.join();
         t1.join();
 
 ## and
 
     @@@ cpp
         thread t1([] {});
-            thread t2([] {});
+        thread t2([] {});
 
 
 <!SLIDE smbullets incremental>
