@@ -1,17 +1,18 @@
-
-#d2_output .result {
-    font-size: 60%;
+/* Remove the darkish border around each slide */
+#preso, .slide {
+    box-shadow: 0 0 0px rgba(0,0,0,0);
 }
 
-#d2_output_all .result {
-    font-size: 80%;
+body, #preso, .slide {
+    background-color: white;
+    border: none;
+    margin: none;
+    width: 100%;
 }
 
-#mumbo_jumbo .result {
-    font-size: 60%;
+#break_mumbo_jumbo {
     word-wrap: break-word;
 }
-
 
 .graph_example .sh_sourceCode {
     float: left;

@@ -111,7 +111,7 @@
 <h1>Lock order inconsistencies</h1>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/2">
-<h2>Example #1</h2>
+<h1>Example #1</h1>
 
 <pre class="sh_cpp"><code>    mutex A, B;
     thread t1([&amp;] {
@@ -125,7 +125,7 @@
     });</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/3">
-<h2>Example #2</h2>
+<h1>Example #2</h1>
 
 <pre class="sh_cpp"><code>    mutex A, B, C;
     thread t1([&amp;] {
@@ -144,7 +144,7 @@
     });</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/4">
-<h2>Same principle but harder to catch</h2>
+<h1>Same principle but harder to catch</h1>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/5">
 <h1>Why are they so vicious?</h1>
@@ -222,9 +222,6 @@ conditions.</p>
 <li>Limited to POSIX pthreads threading primitives</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="3_existing_solutions/8">
-<h2>There are also several solutions for the JVM</h2>
-</div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="4_d2/1_d2/1">
 <h1><code>d2</code>: a library-based approach</h1>
 </div>
@@ -249,36 +246,35 @@ conditions.</p>
 <li>Thread start and join</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/3">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/3">
 <h2>High level API with concepts from Boost.Thread</h2>
 
 <pre class="sh_cpp"><code>    boost::BasicLockable
     boost::Lockable
     boost::TimedLockable</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/4">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/4">
 <h2>Simply wrap your class with the corresponding wrapper</h2>
 
-<pre class="sh_cpp"><code>    struct untracked_mutex {
+<pre class="sh_cpp"><code>    class untracked_mutex {
+    public:
       void lock();
       void unlock();
     };
 
     typedef d2::basic_lockable&lt;untracked_mutex&gt; mutex;</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/5">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/5">
 <h2>All wrappers have a recursive counterpart</h2>
 
 <pre class="sh_cpp"><code>    d2::recursive_basic_lockable
     d2::recursive_lockable
     d2::recursive_timed_lockable</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/6">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/6">
 <h2>You can also bypass the concept based API</h2>
 
-<pre class="sh_cpp"><code>    class mutex
-      : d2::trackable_sync_object&lt;d2::non_recursive&gt;
-    {
+<pre class="sh_cpp"><code>    class mutex : d2::trackable_sync_object&lt;d2::non_recursive&gt; {
     public:
       void some_method_to_lock() {
         // normal code
@@ -291,16 +287,16 @@ conditions.</p>
       }
     };</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/7">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/7">
 <h2>Tracking standard conforming threads is easy</h2>
 
-<pre class="sh_cpp"><code>    struct untracked_thread {
+<pre class="sh_cpp"><code>    class untracked_thread {
       // ...
     };
 
     typedef d2::standard_thread&lt;untracked_thread&gt; thread;</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/8">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/8">
 <h2>Tracking non standard thread implementations is possible too</h2>
 
 <pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
@@ -309,29 +305,40 @@ conditions.</p>
       void some_method_to_start(F&amp;&amp; f, Args&amp;&amp; ...args) {
         typedef d2::thread_function&lt;F&gt; F_;
         F_ f_ = this-&gt;get_thread_function(f);
-
         // normal code using F_ and f_
       }
+    };</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/9">
+<h2>Tracking non standard thread implementations is possible too</h2>
 
+<pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
+    public:
       void some_method_to_join() {
         // normal code
         this-&gt;notify_join();
       }
+    };</code></pre>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/10">
+<h2>Tracking non standard thread implementations is possible too</h2>
 
+<pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
+    public:
       void some_method_to_detach() {
         // normal code
         this-&gt;notify_detach();
       }
     };</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/9">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/11">
 <h2>Don't forget to modify these</h2>
 
 <pre class="sh_cpp"><code>    thread(thread&amp;&amp; other);
     thread&amp; operator=(thread&amp;&amp; other);
     friend void swap(thread&amp; a, thread&amp; b);</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smaller" ref="4_d2/2_design_and_usage/10">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/12">
 <h2>Low level C API (for eventual bindings)</h2>
 
 <pre class="sh_c"><code>    d2_notify_acquire(thread, lock)
@@ -341,20 +348,31 @@ conditions.</p>
     d2_notify_start(parent, child)
     d2_notify_join(parent, child)</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/11">
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/13">
 <h2>Events are generated and dispatched to the filesystem</h2>
 
 <p><img src="./file/4_d2/example_repository.png" width="770" height="438" alt="Example repository"/>
 </p>
 </div>
-</div><div id="mumbo_jumbo" class="slide" data-transition="none"><div class="content commandline" ref="4_d2/2_design_and_usage/12">
+</div><div id="break_mumbo_jumbo" class="slide" data-transition="none">
+  <div class="content commandline" ref="4_d2/2_design_and_usage/14">
 <h2>Mumbo jumbo on disk</h2>
 
 <pre><code><code class="command">$ cat my_program/1    # thread 1</code>
 <code class="result">22 serialization::archive 10 0 0 4 0 0 0 0 1 0 0 2 0 0 0 0 0 1 0 0 2 0 0 0 0 0 0 0 1 3 0 0 0 1 4 0 0 0 1 5 0 0 0 1 6 0 0 0 1 7 0 0 0 1 8 0 0 0 1 9 0 0 0 1 10 0 0 0 1 11 0 0 0 1 12 0 0 0 1 13 0 0 0 1 14 0 0 0 1 15 0 0 0 1 16 0 0 0 1 17 0 0 0 1 18 0 0 0 1 19 0 0 0 1 20 0 0 0 1 21 0 0 0 1 22 0 0 0 1 23 0 0 0 1 24 0 0 0 1 25 0 0 0 1 26 0 0 0 1 27 0 0 0 1 28 0 0 0 1 29 0 0 0 1 30 0 0 0 1 31 0 0 0 1 32 0 0 0 1 33 0 0 0 1 34 0 0 0 1 35 0 0 0 1 36 0 0 0 1 37 0 0 0 1 38 0 0 0 1 39 0 0 0 1 40 0 0 0 1 41 0 0 0 1 42 0 0 0 1 43 0 0 0 1 44 0 0 0 1 45 0 0 0 1 46 0 0 0 1 47 0 0 0 1 48 0 0 0 1 49 0 0 0 1 50 0 0 0 1 51 0 0 0 1 52 0 0 0 1 53 0 0 0 1 54 0 0 0 1 55 0 0 0 1 56 0 0 0 1 57 0 0 0 1 58 0 0 0 1 59 0 0 0 1 60 0 0 0 1 61 0 0 0 1 62 0 0 0 1 63 0 0 0 1 64 0 0 0 1 65 0 0 0 1 66 0 0 0 1 67 0 0 0 1 68 0 0 0 1 69 0 0 0 1 70 0 0 0 1 71 0 0 0 1 72 0 0 0 1 73 0 0 0 1 74 0 0 0 1 75 0 0 0 1 76 0 0 0 1 77 0 0 0 1 78 0 0 0 1 79 0 0 0 1 80 0 0 0 1 81 0 0 0 1 82 0 0 0 1 83 0 0 0 1 84 0 0 0 1 85 0 0 0 1 86 0 0 0 1 87 0 0 0 1 88 0 0 0 1 89 0 0 0 1 90 0 0 0 1 91 0 0 0 1 92 0 0 0 1 93 0 0 0 1 94 0 0 0 1 95 0 0 0 1 96 0 0 0 1 97 0 0 0 1 98 0 0 0 1 99 0 0 0 1 100 0 0 0 1 101 0 0 1 0 0 1 101 0 0 1 1 100 0 0 1 1 99 0 0 1 1 98 0 0 1 1 97 0 0 1 1 96 0 0 1 1 95 0 0 1 1 94 0 0 1 1 93 0 0 1 1 92 0 0 1 1 91 0 0 1 1 90 0 0 1 1 89 0 0 1 1 88 0 0 1 1 87 0 0 1 1 86 0 0 1 1 85 0 0 1 1 84 0 0 1 1 83 0 0 1 1 82 0 0 1 1 81 0 0 1 1 80 0 0 1 1 79 0 0 1 1 78 0 0 1 1 77 0 0 1 1 76 0 0 1 1 75 0 0 1 1 74 0 0 1 1 73 0 0 1 1 72 0 0 1 1 71 0 0 1 1 70 0 0 1 1 69 0 0 1 1 68 0 0 1 1 67 0 0 1 1 66 0 0 1 1 65 0 0 1 1 64 0 0 1 1 63 0 0 1 1 62 0 0 1 1 61 0 0 1 1 60 0 0 1 1 59 0 0 1 1 58 0 0 1 1 57 0 0 1 1 56 0 0 1 1 55 0 0 1 1 54 0 0 1 1 53 0 0 1 1 52 0 0 1 1 51 0 0 1 1 50 0 0 1 1 49 0 0 1 1 48 0 0 1 1 47 0 0 1 1 46 0 0 1 1 45 0 0 1 1 44 0 0 1 1 43 0 0 1 1 42 0 0 1 1 41 0 0 1 1 40 0 0 1 1 39 0 0 1 1 38 0 0 1 1 37 0 0 1 1 36 0 0 1 1 35 0 0 1 1 34 0 0 1 1 33 0 0 1 1 32 0 0 1 1 31 0 0 1 1 30 0 0 1 1 29 0 0 1 1 28 0 0 1 1 27 0 0 1 1 26 0 0 1 1 25 0 0 1 1 24 0 0 1 1 23 0 0 1 1 22 0 0 1 1 21 0 0 1 1 20 0 0 1 1 19 0 0 1 1 18 0 0 1 1 17 0 0 1 1 16 0 0 1 1 15 0 0 1 1 14 0 0 1 1 13 0 0 1 1 12 0 0 1 1 11 0 0 1 1 10 0 0 1 1 9 0 0 1 1 8 0 0 1 1 7 0 0 1 1 6 0 0 1 1 5 0 0 1 1 4 0 0 1 1 3 0 0 1 1 2 0 0
 </code></code></pre>
-</div>
-</div><div id="d2_output_all" class="slide" data-transition="none"><div class="content commandline" ref="4_d2/2_design_and_usage/13">
+
+<p><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br/>
+</br>
+</br>
+</br></br></br></br></p></div>
+</div><div class="slide" data-transition="none"><div class="content commandline" ref="4_d2/2_design_and_usage/15">
 <p class="notes">d2tool loads the events, constructs the graphs and performs the analysis.
 Also mention that this output was cropped and edited a bit for clarity.</p>
 
@@ -374,7 +392,7 @@ in thread #XX started at [location]:
   tries to acquire object #WW at [location]
 </code></code></pre>
 </div>
-</div><div id="d2_output" class="slide" data-transition="none"><div class="content commandline" ref="4_d2/2_design_and_usage/14">
+</div><div class="slide" data-transition="none"><div class="content commandline" ref="4_d2/2_design_and_usage/16">
 <h2>where each [location] is a complete call stack:</h2>
 
 <pre><code><code class="command">$ d2tool --analyze myprogram</code>
@@ -389,10 +407,9 @@ holds object #1 acquired at
 [...]/libboost_thread-mt.dylib thread_proxy
 [...]/libsystem_c.dylib        _pthread_start
 [...]/libsystem_c.dylib        thread_start
-...
 </code></code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="4_d2/2_design_and_usage/15">
+</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="4_d2/2_design_and_usage/17">
 <h2>Current limitations:</h2>
 
 <ul>
@@ -403,49 +420,53 @@ holds object #1 acquired at
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="4_d2/3_algorithm/1_algorithm/1">
 <h1>The algorithm</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/2">
-<h1>Disclaimer:</h1>
+</div><div class="slide" data-transition="none">
+  <div class="content" ref="4_d2/3_algorithm/1_algorithm/2">
+<h1>Disclaimer</h1>
 
 <p>I am <strong>not</strong> the author of the algorithm. It is presented in:</p>
 
-<p>"Detection of deadlock potentials in multithreaded programs",
-IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15,
-Sept.-Oct. 2010</p>
+<p>"Detection of deadlock potentials in multithreaded programs"<br>
+IBM Journal of Research and Development, vol.54, no.5, pp.3:1,3:15<br>
+Sept.-Oct. 2010</br>
+</br>
+</p>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/3">
 <h2>A note for the rest of the presentation:</h2>
 
-<p>For brevity, unlocking mutexes and joining threads will often be omitted.
+<p>For brevity, unlocking mutexes and joining threads will often be omitted.<br>
 When omitted, assume the mutexes are unlocked in reverse order of locking
-and threads are joined in reverse order of starting.</p>
+and threads are joined in reverse order of starting.</br>
+</p>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/4">
 <h2>So these are the same:</h2>
 
 <pre class="sh_cpp"><code>    mutex A, B;
     A.lock();
-        B.lock();
-        B.unlock();
+    B.lock();
+    B.unlock();
     A.unlock();</code></pre>
 
 <h2>and</h2>
 
 <pre class="sh_cpp"><code>    mutex A, B;
     A.lock();
-        B.lock();</code></pre>
+    B.lock();</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/5">
 <h2>And so are these:</h2>
 
 <pre class="sh_cpp"><code>    thread t1([] {});
-        thread t2([] {});
-        t2.join();
+    thread t2([] {});
+    t2.join();
     t1.join();</code></pre>
 
 <h2>and</h2>
 
 <pre class="sh_cpp"><code>    thread t1([] {});
-        thread t2([] {});</code></pre>
+    thread t2([] {});</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/3_algorithm/1_algorithm/6">
 <p class="notes">Specify that we'll be adding annotation on the graph to encode more
