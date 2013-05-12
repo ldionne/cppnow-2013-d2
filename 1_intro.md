@@ -14,10 +14,10 @@ I enjoy philosophy, barley wine, classical music and sometimes mixing these toge
 <!SLIDE>
 # Overview
 
-* The target: lock order inconsistencies
-* Existing solutions
-* `d2`: a library-based approach
+1. The target: lock order inconsistencies
+2. Existing solutions
+3. `d2`: a library-based approach
     * Design and usage
     * Algorithm
     * Roadmap
-* Towards `dyno`: a DSEL for dynamic analysis
+4. Towards `dyno`: a DSEL for dynamic analysis
