@@ -19,71 +19,71 @@
 ## First, define an event
 
     @@@ cpp
-        namespace tags {
-          struct acquire;
-          struct lock_id;
-        }
+    namespace tags {
+      struct acquire;
+      struct lock_id;
+    }
 
-        typedef event<tags::acquire,
-                  records<call_stack>,
-                  records<thread_id>,
-                  records<
-                   custom_info<tags::lock_id, unsigned>
-                  >
-                > acquire_event;
+    typedef event<tags::acquire,
+              records<call_stack>,
+              records<thread_id>,
+              records<
+               custom_info<tags::lock_id, unsigned>
+              >
+            > acquire_event;
 
 
 <!SLIDE small>
 ## Then, bundle the events into a `framework`
 
     @@@ cpp
-        typedef framework<
-                  events<
-                    acquire_event, release_event,
-                    start_event, join_event
-                  >,
-                  backend<save_on_filesystem>
-                > d2_framework_t;
+    typedef framework<
+              events<
+                acquire_event, release_event,
+                start_event, join_event
+              >,
+              backend<save_on_filesystem>
+            > d2_framework_t;
 
-        static d2_framework_t d2_framework;
+    static d2_framework_t d2_framework;
 
 
 <!SLIDE small>
 ## Bind actions to events as wanted
 
     @@@ cpp
-        dyno::on<tags::acquire>(d2_framework,
-            [](acquire_event e) {
-              // whatever
-            });
+    dyno::on<tags::acquire>(d2_framework,
+        [](acquire_event e) {
+          // whatever
+        });
 
 
 <!SLIDE small>
 ## Generate events in your code
 
     @@@ cpp
-        struct mutex {
-          void lock() {
-            dyno::generate<tags::acquire>(
-                          d2_framework, *this);
-          }
-        };
+    struct mutex {
+      void lock() {
+        dyno::generate<tags::acquire>(
+                      d2_framework, *this);
+      }
+    };
 
 
 <!SLIDE small>
 ## Load events from a source to perform your custom analysis without hassle
 
     @@@ cpp
-        struct populate_lock_graph {
-          void operator()(acquire_event e) const;
-          void operator()(release_event e) const;
+    struct populate_lock_graph {
+      void operator()(acquire_event e) const;
+      void operator()(release_event e) const;
 
-          template <typename AnyOtherEvent>
-          void operator()(AnyOtherEvent) const;
-        };
+      template <typename AnyOtherEvent>
+      void operator()(AnyOtherEvent) const;
+    };
 
-        dyno::load_events("some_directory",
-                          populate_lock_graph());
+    dyno::load_events("some_directory",
+                      populate_lock_graph());
 
 
 <!SLIDE bullets incremental>
