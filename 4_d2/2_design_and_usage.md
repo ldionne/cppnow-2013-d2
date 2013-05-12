@@ -57,7 +57,9 @@
 ## You can also bypass the concept based API
 
     @@@ cpp
-    class mutex : d2::trackable_sync_object<d2::non_recursive> {
+    class mutex
+      : d2::trackable_sync_object<d2::non_recursive>
+    {
     public:
       void some_method_to_lock() {
         // normal code
