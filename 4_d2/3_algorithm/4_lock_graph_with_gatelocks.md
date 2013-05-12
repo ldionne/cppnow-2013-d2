@@ -191,8 +191,6 @@ gatelocks.
 <!SLIDE graph_example>
 ## However, consider this situation, where `t1` and `t2` will never run in parallel:
 
-<div id="fuck"></div>
-
     @@@ cpp
     mutex A, B;
     thread t1([&] {
