@@ -2,6 +2,14 @@
 # A system for resource deadlock prevention
 ## ~~~CONFIG:author~~~, ~~~CONFIG:venue~~~
 
+<!SLIDE>
+# About me
+
+I am a 21 years old math and programming enthusiast seeking excellence in what I do.
+
+I enjoy philosophy, barley wine, classical music and sometimes mixing these together.
+
+## github.com/ldionne
 
 <!SLIDE>
 # Overview
