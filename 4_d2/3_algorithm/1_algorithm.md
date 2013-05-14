@@ -53,7 +53,7 @@ and threads are joined in reverse order of starting.
     thread t2([] {});
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE smbullets>
 .notes Specify that we'll be adding annotation on the graph to encode more
 information like segmentation and gatelocks. Precise that we'll start with
 the most basic graph and add annotations as we go to improve the algorithm.

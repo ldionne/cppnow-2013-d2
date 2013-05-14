@@ -2,7 +2,7 @@
 # Summary of the algorithm
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE smbullets>
 ## The lock graph is a directed multigraph
 
 * Vertices represent synchronization objects
@@ -10,14 +10,14 @@
 * A cycle in the graph represents a potential deadlock
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE smbullets>
 ## The segmentation graph is a directed acyclic graph
 
 * Vertices represent segments of code separated by `start`s and `join`s
 * A path from `u` to `v` means that `u` happens before `v`
 
 
-<!SLIDE smbullets incremental>
+<!SLIDE smbullets>
 ## We label each edge of the lock graph with
 
 * The thread that performed the acquire

@@ -2,11 +2,11 @@
 # Design and usage
 
 
-<!SLIDE bullets incremental>
+<!SLIDE smbullets>
 ## `d2` needs to record 4 types of events
 
-* Lock acquire and release
-* Thread start and join
+* Lock acquires and releases
+* Thread starts and joins
 
 
 <!SLIDE centered-code>
@@ -248,7 +248,7 @@ Also mention that this output was cropped and edited a bit for clarity.
     [...]/libsystem_c.dylib        thread_start
 
 
-<!SLIDE bullets incremental>
+<!SLIDE smbullets>
 ## Current limitations:
 
 * Output is not as nicely formatted
