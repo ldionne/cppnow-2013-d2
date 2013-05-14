@@ -5,9 +5,8 @@
 <!SLIDE>
 # About me
 
-I am a 21 years old math and programming enthusiast seeking excellence in what I do.
-
-I enjoy philosophy, barley wine, classical music and sometimes mixing these together.
+I am a math student and programming enthusiast constantly seeking for
+improvement.
 
 ## github.com/ldionne
 
