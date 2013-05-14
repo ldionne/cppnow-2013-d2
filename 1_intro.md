@@ -19,4 +19,4 @@ improvement.
     * Design and usage
     * Algorithm
     * Roadmap
-4. Towards `dyno`: a DSEL for dynamic analysis
+4. Towards `dyno`: a dynamic analysis library
