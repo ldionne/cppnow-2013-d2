@@ -41,7 +41,11 @@
   
     <link rel="stylesheet" href="./file/custom.css" type="text/css"/>
   
+    <link rel="stylesheet" href="./file/sh_styles.css" type="text/css"/>
+  
 
+  
+    <script type="text/javascript" src="./file/custom.js"></script>
   
 
   <script type="text/javascript">
@@ -92,9 +96,17 @@
 <h2>Louis Dionne, C++Now 2013</h2>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="1_intro/2">
+<h1>About me</h1>
+
+<p>I am a math student and programming enthusiast constantly seeking for
+improvement.</p>
+
+<h2>github.com/ldionne</h2>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="1_intro/3">
 <h1>Overview</h1>
 
-<ul>
+<ol>
 <li>The target: lock order inconsistencies</li>
 <li>Existing solutions</li>
 <li><code>d2</code>: a library-based approach
@@ -104,44 +116,44 @@
 <li>Algorithm</li>
 <li>Roadmap</li>
 </ul></li>
-<li>Towards <code>dyno</code>: a DSEL for dynamic analysis</li>
-</ul>
+<li>Towards <code>dyno</code>: a dynamic analysis library</li>
+</ol>
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="2_lock_order_inconsistencies/1">
 <h1>Lock order inconsistencies</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/2">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="2_lock_order_inconsistencies/2">
 <h1>Example #1</h1>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        scoped_lock a(A);
-        scoped_lock b(B);
-    });
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    scoped_lock a(A);
+    scoped_lock b(B);
+});
 
-    thread t2([&amp;] {
-        scoped_lock b(B);
-        scoped_lock a(A);
-    });</code></pre>
+thread t2([&amp;] {
+    scoped_lock b(B);
+    scoped_lock a(A);
+});</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/3">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="2_lock_order_inconsistencies/3">
 <h1>Example #2</h1>
 
-<pre class="sh_cpp"><code>    mutex A, B, C;
-    thread t1([&amp;] {
-        scoped_lock a(A);
-        scoped_lock b(B);
-    });
+<pre class="sh_cpp"><code>mutex A, B, C;
+thread t1([&amp;] {
+    scoped_lock a(A);
+    scoped_lock b(B);
+});
 
-    thread t2([&amp;] {
-        scoped_lock b(B);
-        scoped_lock c(C);
-    });
+thread t2([&amp;] {
+    scoped_lock b(B);
+    scoped_lock c(C);
+});
 
-    thread t3([&amp;] {
-        scoped_lock c(C);
-        scoped_lock a(A);
-    });</code></pre>
+thread t3([&amp;] {
+    scoped_lock c(C);
+    scoped_lock a(A);
+});</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/4">
 <h1>Same principle but harder to catch</h1>
@@ -172,14 +184,14 @@ conditions.</p>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="3_existing_solutions/1">
 <h1>Existing solutions</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/2">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/2">
 <h2>Never hold more than one lock at once</h2>
 
 <ul>
 <li>Not realistic for non-trivial programs</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/3">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/3">
 <h2>Determine a hierarchy among locks and respect it</h2>
 
 <ul>
@@ -187,7 +199,7 @@ conditions.</p>
 <li>Not realistic for non-trivial programs</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/4">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/4">
 <h2>Disturb thread scheduling to provoke hidden deadlocks</h2>
 
 <ul>
@@ -195,7 +207,7 @@ conditions.</p>
 <li>Good idea that could be mixed with other approaches</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/5">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/5">
 <h2>Use an algorithm to break deadlocks when they happen</h2>
 
 <ul>
@@ -204,7 +216,7 @@ conditions.</p>
 <li>Misses the point: deadlocks are a bug, not a runtime mishap</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/6">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/6">
 <h2>Intel&#xAE; Inspector XE</h2>
 
 <ul>
@@ -214,7 +226,7 @@ conditions.</p>
 <li>Exact capabilities for deadlock detection unknown</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="3_existing_solutions/7">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/7">
 <h2>Valgrind (Helgrind)</h2>
 
 <ul>
@@ -225,7 +237,7 @@ conditions.</p>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="4_d2/1_d2/1">
 <h1><code>d2</code>: a library-based approach</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="4_d2/1_d2/2">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/1_d2/2">
 <h1>Goals</h1>
 
 <ul>
@@ -235,120 +247,128 @@ conditions.</p>
 <li>Very few false positives</li>
 </ul>
 </div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/1_d2/3">
+<h1>Why intrusive?</h1>
+</div>
+</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/1_d2/4">
+<h1>Easier to implement</h1>
+</div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="4_d2/2_design_and_usage/1">
 <h1>Design and usage</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="4_d2/2_design_and_usage/2">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/2_design_and_usage/2">
 <h2><code>d2</code> needs to record 4 types of events</h2>
 
 <ul>
-<li>Lock acquire and release</li>
-<li>Thread start and join</li>
+<li>Lock acquires and releases</li>
+<li>Thread starts and joins</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/3">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/2_design_and_usage/3">
 <h2>High level API with concepts from Boost.Thread</h2>
 
-<pre class="sh_cpp"><code>    boost::BasicLockable
-    boost::Lockable
-    boost::TimedLockable</code></pre>
+<pre class="sh_cpp"><code>boost::BasicLockable
+boost::Lockable
+boost::TimedLockable</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/4">
 <h2>Simply wrap your class with the corresponding wrapper</h2>
 
-<pre class="sh_cpp"><code>    class untracked_mutex {
-    public:
-      void lock();
-      void unlock();
-    };
+<pre class="sh_cpp"><code>class untracked_mutex {
+public:
+  void lock();
+  void unlock();
+};
 
-    typedef d2::basic_lockable&lt;untracked_mutex&gt; mutex;</code></pre>
+typedef d2::basic_lockable&lt;untracked_mutex&gt; mutex;</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/5">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/2_design_and_usage/5">
 <h2>All wrappers have a recursive counterpart</h2>
 
-<pre class="sh_cpp"><code>    d2::recursive_basic_lockable
-    d2::recursive_lockable
-    d2::recursive_timed_lockable</code></pre>
+<pre class="sh_cpp"><code>d2::recursive_basic_lockable
+d2::recursive_lockable
+d2::recursive_timed_lockable</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/6">
 <h2>You can also bypass the concept based API</h2>
 
-<pre class="sh_cpp"><code>    class mutex : d2::trackable_sync_object&lt;d2::non_recursive&gt; {
-    public:
-      void some_method_to_lock() {
-        // normal code
-        this-&gt;notify_lock();
-      }
+<pre class="sh_cpp"><code>class mutex
+  : d2::trackable_sync_object&lt;d2::non_recursive&gt;
+{
+public:
+  void some_method_to_lock() {
+    // normal code
+    this-&gt;notify_lock();
+  }
 
-      void some_method_to_unlock() {
-        // normal code
-        this-&gt;notify_unlock();
-      }
-    };</code></pre>
+  void some_method_to_unlock() {
+    // normal code
+    this-&gt;notify_unlock();
+  }
+};</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/7">
 <h2>Tracking standard conforming threads is easy</h2>
 
-<pre class="sh_cpp"><code>    class untracked_thread {
-      // ...
-    };
+<pre class="sh_cpp"><code>class untracked_thread {
+  // ...
+};
 
-    typedef d2::standard_thread&lt;untracked_thread&gt; thread;</code></pre>
+typedef d2::standard_thread&lt;untracked_thread&gt; thread;</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/8">
 <h2>Tracking non standard thread implementations is possible too</h2>
 
-<pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
-    public:
-      template &lt;typename F, typename ...Args&gt;
-      void some_method_to_start(F&amp;&amp; f, Args&amp;&amp; ...args) {
-        typedef d2::thread_function&lt;F&gt; F_;
-        F_ f_ = this-&gt;get_thread_function(f);
-        // normal code using F_ and f_
-      }
-    };</code></pre>
+<pre class="sh_cpp"><code>class thread : d2::trackable_thread&lt;thread&gt; {
+public:
+  template &lt;typename F, typename ...Args&gt;
+  void some_method_to_start(F&amp;&amp; f, Args&amp;&amp; ...args) {
+    typedef d2::thread_function&lt;F&gt; F_;
+    F_ f_ = this-&gt;get_thread_function(f);
+    // normal code using F_ and f_
+  }
+};</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/9">
 <h2>Tracking non standard thread implementations is possible too</h2>
 
-<pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
-    public:
-      void some_method_to_join() {
-        // normal code
-        this-&gt;notify_join();
-      }
-    };</code></pre>
+<pre class="sh_cpp"><code>class thread : d2::trackable_thread&lt;thread&gt; {
+public:
+  void some_method_to_join() {
+    // normal code
+    this-&gt;notify_join();
+  }
+};</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/10">
 <h2>Tracking non standard thread implementations is possible too</h2>
 
-<pre class="sh_cpp"><code>    class thread : d2::trackable_thread&lt;thread&gt; {
-    public:
-      void some_method_to_detach() {
-        // normal code
-        this-&gt;notify_detach();
-      }
-    };</code></pre>
+<pre class="sh_cpp"><code>class thread : d2::trackable_thread&lt;thread&gt; {
+public:
+  void some_method_to_detach() {
+    // normal code
+    this-&gt;notify_detach();
+  }
+};</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/11">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/2_design_and_usage/11">
 <h2>Don't forget to modify these</h2>
 
-<pre class="sh_cpp"><code>    thread(thread&amp;&amp; other);
-    thread&amp; operator=(thread&amp;&amp; other);
-    friend void swap(thread&amp; a, thread&amp; b);</code></pre>
+<pre class="sh_cpp"><code>thread(thread&amp;&amp; other);
+thread&amp; operator=(thread&amp;&amp; other);
+friend void swap(thread&amp; a, thread&amp; b);</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/12">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/2_design_and_usage/12">
 <h2>Low level C API (for eventual bindings)</h2>
 
-<pre class="sh_c"><code>    d2_notify_acquire(thread, lock)
-    d2_notify_release(thread, lock)
-    d2_notify_recursive_acquire(thread, lock)
-    d2_notify_recursive_release(thread, lock)
-    d2_notify_start(parent, child)
-    d2_notify_join(parent, child)</code></pre>
+<pre class="sh_c"><code>d2_notify_acquire(thread, lock)
+d2_notify_release(thread, lock)
+d2_notify_recursive_acquire(thread, lock)
+d2_notify_recursive_release(thread, lock)
+d2_notify_start(parent, child)
+d2_notify_join(parent, child)</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/13">
+</div><div id="slide-filesystem" class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/13">
 <h2>Events are generated and dispatched to the filesystem</h2>
 
 <p><img src="./file/4_d2/example_repository.png" width="770" height="438" alt="Example repository"/>
@@ -409,7 +429,7 @@ holds object #1 acquired at
 [...]/libsystem_c.dylib        thread_start
 </code></code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="4_d2/2_design_and_usage/17">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/2_design_and_usage/17">
 <h2>Current limitations:</h2>
 
 <ul>
@@ -440,35 +460,35 @@ When omitted, assume the mutexes are unlocked in reverse order of locking
 and threads are joined in reverse order of starting.</br>
 </p>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/4">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/3_algorithm/1_algorithm/4">
 <h2>So these are the same:</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();
-    B.lock();
-    B.unlock();
-    A.unlock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();
+B.lock();
+B.unlock();
+A.unlock();</code></pre>
 
 <h2>and</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();
-    B.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();
+B.lock();</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/1_algorithm/5">
+</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/3_algorithm/1_algorithm/5">
 <h2>And so are these:</h2>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {});
-    t2.join();
-    t1.join();</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {});
+t2.join();
+t1.join();</code></pre>
 
 <h2>and</h2>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {});</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {});</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/3_algorithm/1_algorithm/6">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/1_algorithm/6">
 <p class="notes">Specify that we'll be adding annotation on the graph to encode more
 information like segmentation and gatelocks. Precise that we'll start with
 the most basic graph and add annotations as we go to improve the algorithm.</p>
@@ -487,7 +507,7 @@ created because we did not lock anything.</p>
 
 <h2>Example #1</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A;%20B;%0A%7D" alt=""/>
 </p>
@@ -497,8 +517,8 @@ created because we did not lock anything.</p>
 
 <p>No edge is created; the main thread does not hold anything when it acquires <code>A</code>.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A;%20B;%0A%7D" alt=""/>
 </p>
@@ -508,9 +528,9 @@ created because we did not lock anything.</p>
 
 <p>The main thread holds <code>A</code> when it acquires <code>B</code>; we add an edge from <code>A</code> to <code>B</code>.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();
-        B.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();
+    B.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%7D" alt=""/>
 </p>
@@ -520,11 +540,11 @@ created because we did not lock anything.</p>
 
 <p>The graph is not modified on releases.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();
-        B.lock();
-        B.unlock();
-    A.unlock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();
+    B.lock();
+    B.unlock();
+A.unlock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%7D" alt=""/>
 </p>
@@ -537,14 +557,14 @@ it redundantly if a thread locks B again while holding A.</p>
 
 <p>We don't add redundant edges.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    A.lock();
-        B.lock();
-        B.unlock();
-    A.unlock();
+<pre class="sh_cpp"><code>mutex A, B;
+A.lock();
+    B.lock();
+    B.unlock();
+A.unlock();
 
-    A.lock();
-    B.lock();</code></pre>
+A.lock();
+B.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A%20-%3E%20B;%0A%7D" alt=""/>
 </p>
@@ -552,9 +572,9 @@ it redundantly if a thread locks B again while holding A.</p>
 </div><div class="slide" data-transition="none"><div class="content graph_example" ref="4_d2/3_algorithm/2_basic_lock_graph/6">
 <h2>Example #2</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    A.lock();
-    B.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+A.lock();
+B.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%20%20%20%20A-%3EB;%0A%7D" alt=""/>
 </p>
@@ -565,10 +585,10 @@ it redundantly if a thread locks B again while holding A.</p>
 <p>We're really computing the transitive closure of the "is held by a thread
 when acquiring X" relation.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    A.lock();
-    B.lock();
-    C.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+A.lock();
+B.lock();
+C.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20A-%3EC;%0A%20%20%20%20B-%3EC;%0A%7D" alt=""/>
 </p>
@@ -579,11 +599,11 @@ when acquiring X" relation.</p>
 <p>We're really computing the transitive closure of the "is held by a thread
 when acquiring X" relation.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    A.lock();
-    B.lock();
-    C.lock();
-    D.lock();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+A.lock();
+B.lock();
+C.lock();
+D.lock();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20A-%3EC;%0A%20%20%20%20B-%3EC;%0A%20%20%20%20A-%3ED;%0A%20%20%20%20B-%3ED;%0A%20%20%20%20C-%3ED;%0A%7D" alt=""/>
 </p>
@@ -625,15 +645,15 @@ thread t2([&amp;] {
 </div><div class="slide" data-transition="none"><div class="content graph_example" ref="4_d2/3_algorithm/2_basic_lock_graph/11">
 <h2>Example # 4: Another potential deadlock</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;]{
-        A.lock();
-        B.lock();
-        C.lock();
-        D.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;]{
+    A.lock();
+    B.lock();
+    C.lock();
+    D.lock();
+});
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20A-%3EC;%0A%20%20%20%20B-%3EC;%0A%20%20%20%20A-%3ED;%0A%20%20%20%20B-%3ED;%0A%20%20%20%20C-%3ED;%0A%7D" alt=""/>
 </p>
@@ -641,18 +661,18 @@ thread t2([&amp;] {
 </div><div class="slide" data-transition="none"><div class="content graph_example" ref="4_d2/3_algorithm/2_basic_lock_graph/12">
 <h2>Example #4: Another potential deadlock</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;]{
-        A.lock();
-        B.lock();
-        C.lock();
-        D.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;]{
+    A.lock();
+    B.lock();
+    C.lock();
+    D.lock();
+});
 
-    thread t2([&amp;]{
-        D.lock();
-        B.lock();
-    });</code></pre>
+thread t2([&amp;]{
+    D.lock();
+    B.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20A-%3EC;%0A%20%20%20%20B-%3EC;%0A%20%20%20%20A-%3ED;%0A%20%20%20%20B-%3ED;%0A%20%20%20%20C-%3ED;%0A%20%20%20%20D-%3EB;%0A%7D" alt=""/>
 </p>
@@ -660,21 +680,21 @@ thread t2([&amp;] {
 </div><div class="slide" data-transition="none"><div class="content source_code_270P graph_example" ref="4_d2/3_algorithm/2_basic_lock_graph/13">
 <h2>Example #5: It works for an arbitrary number of threads</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, C;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
 
-    thread t2([&amp;] {
-        B.lock();
-        C.lock();
-    });
+thread t2([&amp;] {
+    B.lock();
+    C.lock();
+});
 
-    thread t3([&amp;] {
-        C.lock();
-        A.lock();
-    });</code></pre>
+thread t3([&amp;] {
+    C.lock();
+    A.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20B-%3EC;%0A%20%20%20%20C-%3EA;%0A%7D" alt=""/>
 </p>
@@ -694,18 +714,18 @@ taken (and we're doing dynamic analysis).</p>
 
 <h2>However, the algorithm can report false positives. Consider:</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-            B.lock();
-            B.unlock();
-        A.unlock();
-
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
         B.lock();
-            A.lock();
-            A.unlock();
         B.unlock();
-    });</code></pre>
+    A.unlock();
+
+    B.lock();
+        A.lock();
+        A.unlock();
+    B.unlock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A-%3EB;%0A%20%20%20%20B-%3EA;%0A%7D" alt=""/>
 </p>
@@ -726,9 +746,9 @@ caused that edge to be added.</p>
 
 <p>No labels, no edges, like the basic graph.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
+<pre class="sh_cpp"><code>mutex A, B;
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20A;%20B;%0A%7D" alt=""/>
 </p>
@@ -738,13 +758,13 @@ caused that edge to be added.</p>
 
 <p>When an edge is added, we label it with the thread that caused its addition.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t1%5D;%0A%7D" alt=""/>
 </p>
@@ -755,16 +775,16 @@ caused that edge to be added.</p>
 <p>We add a parallel edge if the label on it is different from that of existing
 edges.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
 
-    thread t2([&amp;] {
-        A.lock();
-        B.lock();
-    });</code></pre>
+thread t2([&amp;] {
+    A.lock();
+    B.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t1%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t2%5D;%0A%7D" alt=""/>
 </p>
@@ -773,16 +793,16 @@ edges.</p>
 <p>Consider the previous graph with a false positive. We now ignore the single
 threaded cycle:</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-            B.lock();
-            B.unlock();
-        A.unlock();
-
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
         B.lock();
-        A.lock();
-    });</code></pre>
+        B.unlock();
+    A.unlock();
+
+    B.lock();
+    A.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t1%5D;%0A%20%20%20%20B-%3EA%20%5Blabel=t1%5D;%0A%7D" alt=""/>
 </p>
@@ -794,26 +814,26 @@ because t2 appears twice in the cycle.</p>
 
 <p>And cycles still represent potential deadlocks.</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
 
-    thread t2([&amp;] {
-        B.lock();
-            C.lock();
-            C.unlock();
-        B.unlock();
-
+thread t2([&amp;] {
+    B.lock();
         C.lock();
-        A.lock();
-    });
+        C.unlock();
+    B.unlock();
 
-    thread t3([&amp;] {
-        C.lock();
-        A.lock();
-    });</code></pre>
+    C.lock();
+    A.lock();
+});
+
+thread t3([&amp;] {
+    C.lock();
+    A.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t1%5D;%0A%20%20%20%20B-%3EC%20%5Blabel=t2%5D;%0A%20%20%20%20C-%3EA%20%5Blabel=t2%5D;%0A%20%20%20%20C-%3EA%20%5Blabel=t3%5D;%0A%7D" alt=""/>
 </p>
@@ -825,18 +845,18 @@ in order to enter the dangerous section of the code.</p>
 <p>However, consider this situation. Both threads must be holding <code>G</code>, which
 is impossible:</p>
 
-<pre class="sh_cpp"><code>        mutex A, B, G;
-        thread t1([&amp;] {
-            G.lock();
-            A.lock();
-            B.lock();
-        });
+<pre class="sh_cpp"><code>mutex A, B, G;
+thread t1([&amp;] {
+    G.lock();
+    A.lock();
+    B.lock();
+});
 
-        thread t2([&amp;] {
-            G.lock();
-            B.lock();
-            A.lock();
-        });</code></pre>
+thread t2([&amp;] {
+    G.lock();
+    B.lock();
+    A.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent%5D;%0A%20%20%20%20%7Brank%20=%20same;%20A;%20B;%7D%0A%20%20%20%20G-%3EA%20%5Blabel=t1%5D;%0A%20%20%20%20G-%3EB%20%5Blabel=t1%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=t1%5D;%0A%20%20%20%20G-%3EB%20%5Blabel=t2%5D;%0A%20%20%20%20G-%3EA%20%5Blabel=t2%5D;%0A%20%20%20%20B-%3EA%20%5Blabel=t2%5D;%0A%7D" alt=""/>
 </p>
@@ -854,9 +874,9 @@ intersect, i.e. if they share one or more gatelocks.</p>
 </div><div class="slide" data-transition="none"><div class="content graph_example" ref="4_d2/3_algorithm/4_lock_graph_with_gatelocks/2">
 <h2>Example #7</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
+<pre class="sh_cpp"><code>mutex A, B, C, D;
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%7D" alt=""/>
 </p>
@@ -866,13 +886,13 @@ intersect, i.e. if they share one or more gatelocks.</p>
 
 <p><code>t1</code> acquires <code>A</code> while holding nothing</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        // ...
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    // ...
+});
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%7D" alt=""/>
 </p>
@@ -885,14 +905,14 @@ in the next slide.</p>
 
 <p><code>t1</code> acquires <code>B</code> while holding <code>A</code>; <code>A</code> is put in the gatelocks for that edge</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-        // ...
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+    // ...
+});
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -906,14 +926,14 @@ acquiring <code>C</code> is not redundant, because the edge from <code>A</code> 
 <p><code>t1</code> acquires <code>C</code> while holding <code>A</code> and <code>B</code>; all the edges that are added to
 the graph are marked with these gatelocks</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-        C.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+    C.lock();
+});
 
-    // ...</code></pre>
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20curved%5D;%0A%20%20%20%20A;%20B;%20C;%20D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%20%20%20%20A-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20B-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -923,17 +943,17 @@ the graph are marked with these gatelocks</p>
 
 <p><code>t2</code> acquires <code>D</code> while holding nothing</p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-        C.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+    C.lock();
+});
 
-    thread t2([&amp;] {
-        D.lock();
-        // ...
-    });</code></pre>
+thread t2([&amp;] {
+    D.lock();
+    // ...
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20curved%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%20%20%20%20A-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20B-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -943,18 +963,18 @@ the graph are marked with these gatelocks</p>
 
 <p><code>t2</code> acquires <code>A</code> while holding <code>D</code></p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-        C.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+    C.lock();
+});
 
-    thread t2([&amp;] {
-        D.lock();
-        A.lock();
-        // ...
-    });</code></pre>
+thread t2([&amp;] {
+    D.lock();
+    A.lock();
+    // ...
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20curved%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%20%20%20%20A-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20B-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20D-%3EA%20%5Blabel=%22t2%20:%20%7BD%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -964,18 +984,18 @@ the graph are marked with these gatelocks</p>
 
 <p><code>t2</code> acquires <code>B</code> while holding <code>D</code> and <code>A</code></p>
 
-<pre class="sh_cpp"><code>    mutex A, B, C, D;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-        C.lock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, C, D;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+    C.lock();
+});
 
-    thread t2([&amp;] {
-        D.lock();
-        A.lock();
-        B.lock();
-    });</code></pre>
+thread t2([&amp;] {
+    D.lock();
+    A.lock();
+    B.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20curved%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%20%20%20%20A-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20B-%3EC%20%5Blabel=%22t1%20:%20%7BA,%20B%7D%22%5D;%0A%20%20%20%20D-%3EA%20%5Blabel=%22t2%20:%20%7BD%7D%22%5D;%0A%20%20%20%20D-%3EB%20%5Blabel=%22t2%20:%20%7BD,%20A%7D%22%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t2%20:%20%7BD,%20A%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -992,18 +1012,18 @@ gatelocks.</p>
 </div><div class="slide" data-transition="none"><div class="content graph_example" ref="4_d2/3_algorithm/4_lock_graph_with_gatelocks/10">
 <h2>However, consider this situation, where <code>t1</code> and <code>t2</code> will never run in parallel:</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-        B.lock();
-        A.lock();
-    });
-    t2.join();</code></pre>
+thread t2([&amp;] {
+    B.lock();
+    A.lock();
+});
+t2.join();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20rankdir%20=%20LR%5D;%0A%20%20%20%20A-%3EB%20%5Blabel=%22t1%20:%20%7BA%7D%22%5D;%0A%20%20%20%20B-%3EA%20%5Blabel=%22t2%20:%20%7BB%7D%22%5D;%0A%7D" alt=""/>
 </p>
@@ -1039,7 +1059,7 @@ in parallel.</p>
 
 <p><code>main</code> starts in segment 0</p>
 
-<pre class="sh_cpp"><code>    // ...</code></pre>
+<pre class="sh_cpp"><code>// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1049,8 +1069,8 @@ in parallel.</p>
 
 <p><code>main</code> starts <code>t1</code>; <code>main</code> and <code>t1</code> get new segments</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    // ...</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1060,11 +1080,11 @@ in parallel.</p>
 
 <p><code>main</code> starts <code>t2</code>; <code>main</code> and <code>t2</code> get new segments</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {
-        // ...
-    });
-    // ...</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {
+    // ...
+});
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main1%20-%3E%20t20;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1074,12 +1094,12 @@ in parallel.</p>
 
 <p><code>t2</code> starts <code>t3</code>; <code>t2</code> and <code>t3</code> get new segments</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {
-        thread t3([] {});
-        // ...
-    });
-    // ...</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {
+    thread t3([] {});
+    // ...
+});
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main1%20-%3E%20t20%20-%3E%20t21;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%20%20%20%20t21%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t3%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t3%22;%0A%20%20%20%20%20%20%20%20t20%20-%3E%20t30;%0A%20%20%20%20%20%20%20%20t30%20%5Blabel%20=%20s6%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1089,12 +1109,12 @@ in parallel.</p>
 
 <p><code>t2</code> joins <code>t3</code>; <code>t2</code> continues in a new segment</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {
-        thread t3([] {});
-        t3.join();
-    });
-    // ...</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {
+    thread t3([] {});
+    t3.join();
+});
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main1%20-%3E%20t20%20-%3E%20t21%20-%3E%20t22;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%20%20%20%20t21%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%20%20%20%20t22%20%5Blabel%20=%20s7%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t3%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t3%22;%0A%20%20%20%20%20%20%20%20t20%20-%3E%20t30%20-%3E%20t22;%0A%20%20%20%20%20%20%20%20t30%20%5Blabel%20=%20s6%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1104,13 +1124,13 @@ in parallel.</p>
 
 <p><code>main</code> joins <code>t1</code>; <code>main</code> continues in a new segment</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {
-        thread t3([] {});
-        t3.join();
-    });
-    t1.join();
-    // ...</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {
+    thread t3([] {});
+    t3.join();
+});
+t1.join();
+// ...</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2%20-%3E%20main3;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%20%20%20%20main3%20%5Blabel%20=%20s8%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main3;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main1%20-%3E%20t20%20-%3E%20t21%20-%3E%20t22;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%20%20%20%20t21%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%20%20%20%20t22%20%5Blabel%20=%20s7%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t3%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t3%22;%0A%20%20%20%20%20%20%20%20t20%20-%3E%20t30%20-%3E%20t22;%0A%20%20%20%20%20%20%20%20t30%20%5Blabel%20=%20s6%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1120,13 +1140,13 @@ in parallel.</p>
 
 <p><code>main</code> joins <code>t2</code>; <code>main</code> continues in a new segment</p>
 
-<pre class="sh_cpp"><code>    thread t1([] {});
-    thread t2([] {
-        thread t3([] {});
-        t3.join();
-    });
-    t1.join();
-    t2.join();</code></pre>
+<pre class="sh_cpp"><code>thread t1([] {});
+thread t2([] {
+    thread t3([] {});
+    t3.join();
+});
+t1.join();
+t2.join();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20graph%20%5Bbgcolor%20=%20transparent,%20splines%20=%20ortho%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2%20-%3E%20main3%20-%3E%20main4;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%20%20%20%20main3%20%5Blabel%20=%20s8%5D;%0A%20%20%20%20%20%20%20%20main4%20%5Blabel%20=%20s9%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main3;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main1%20-%3E%20t20%20-%3E%20t21%20-%3E%20t22%20-%3E%20main4;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%20%20%20%20t21%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%20%20%20%20t22%20%5Blabel%20=%20s7%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t3%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t3%22;%0A%20%20%20%20%20%20%20%20t20%20-%3E%20t30%20-%3E%20t22;%0A%20%20%20%20%20%20%20%20t30%20%5Blabel%20=%20s6%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 </p>
@@ -1141,23 +1161,23 @@ the cycle.</p>
 </div><div class="slide" data-transition="none"><div class="content graph_example lock_graph_with_segments" ref="4_d2/3_algorithm/6_lock_graph_with_segments/2">
 <p>Let's go back to our false positive:</p>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-        B.lock();
-        A.lock();
-    });</code></pre>
+thread t2([&amp;] {
+    B.lock();
+    A.lock();
+});</code></pre>
 </div>
 </div><div class="slide" data-transition="none">
   <div class="content graph_example lock_graph_with_segments" ref="4_d2/3_algorithm/6_lock_graph_with_segments/3">
 <h2><code>main</code> starts in segment 0</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1169,10 +1189,10 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments" ref="4_d2/3_algorithm/6_lock_graph_with_segments/4">
 <h2><code>main</code> starts <code>t1</code>; <code>main</code> and <code>t1</code> get new segments</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        // ...
-    });</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    // ...
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1184,11 +1204,11 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments" ref="4_d2/3_algorithm/6_lock_graph_with_segments/5">
 <h2><code>t1</code> acquires <code>A</code> and then <code>B</code>, both in segment 2</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1200,12 +1220,12 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments" ref="4_d2/3_algorithm/6_lock_graph_with_segments/6">
 <h2><code>main</code> joins <code>t1</code>; <code>main</code> continues in a new segment</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();</code></pre>
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1217,16 +1237,16 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments source_code_230P" ref="4_d2/3_algorithm/6_lock_graph_with_segments/7">
 <h2><code>main</code> starts <code>t2</code>; <code>main</code> and <code>t2</code> get new segments</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-        // ...
-    });</code></pre>
+thread t2([&amp;] {
+    // ...
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2%20-%3E%20main3;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%20%20%20%20main3%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main2%20-%3E%20t20;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1238,17 +1258,17 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments source_code_230P" ref="4_d2/3_algorithm/6_lock_graph_with_segments/8">
 <h2><code>t2</code> locks <code>B</code> and then <code>A</code>, both in segment 4</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-        B.lock();
-        A.lock();
-    });</code></pre>
+thread t2([&amp;] {
+    B.lock();
+    A.lock();
+});</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2%20-%3E%20main3;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%20%20%20%20main3%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main2%20-%3E%20t20;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1260,18 +1280,18 @@ the cycle.</p>
   <div class="content graph_example lock_graph_with_segments source_code_230P" ref="4_d2/3_algorithm/6_lock_graph_with_segments/9">
 <h2><code>main</code> joins <code>t2</code>; <code>main</code> continues in a new segment</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-        A.lock();
-        B.lock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+    A.lock();
+    B.lock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-        B.lock();
-        A.lock();
-    });
-    t2.join();</code></pre>
+thread t2([&amp;] {
+    B.lock();
+    A.lock();
+});
+t2.join();</code></pre>
 
 <p><img src="https://chart.googleapis.com/chart?cht=gv&amp;chl=digraph%20%7B%0A%20%20%20%20label%20=%20%22segmentation%20graph%22;%0A%20%20%20%20graph%20%5Bsplines%20=%20ortho,%20bgcolor%20=%20transparent%5D;%0A%20%20%20%20subgraph%20cluster_main%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22main%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20main1%20-%3E%20main2%20-%3E%20main3%20-%3E%20main4;%0A%20%20%20%20%20%20%20%20main0%20%5Blabel%20=%20s0%5D;%0A%20%20%20%20%20%20%20%20main1%20%5Blabel%20=%20s1%5D;%0A%20%20%20%20%20%20%20%20main2%20%5Blabel%20=%20s3%5D;%0A%20%20%20%20%20%20%20%20main3%20%5Blabel%20=%20s5%5D;%0A%20%20%20%20%20%20%20%20main4%20%5Blabel%20=%20s6%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t1%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t1%22;%0A%20%20%20%20%20%20%20%20main0%20-%3E%20t10%20-%3E%20main2;%0A%20%20%20%20%20%20%20%20t10%20%5Blabel%20=%20s2%5D;%0A%20%20%20%20%7D%0A%20%20%20%20subgraph%20cluster_t2%20%7B%0A%20%20%20%20%20%20%20%20label%20=%20%22t2%22;%0A%20%20%20%20%20%20%20%20main2%20-%3E%20t20%20-%3E%20main4;%0A%20%20%20%20%20%20%20%20t20%20%5Blabel%20=%20s4%5D;%0A%20%20%20%20%7D%0A%7D" alt=""/>
 
@@ -1285,7 +1305,7 @@ the cycle.</p>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/7_summary/1">
 <h1>Summary of the algorithm</h1>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/3_algorithm/7_summary/2">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/2">
 <h2>The lock graph is a directed multigraph</h2>
 
 <ul>
@@ -1294,7 +1314,7 @@ the cycle.</p>
 <li>A cycle in the graph represents a potential deadlock</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/3_algorithm/7_summary/3">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/3">
 <h2>The segmentation graph is a directed acyclic graph</h2>
 
 <ul>
@@ -1302,7 +1322,7 @@ the cycle.</p>
 <li>A path from <code>u</code> to <code>v</code> means that <code>u</code> happens before <code>v</code></li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/3_algorithm/7_summary/4">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/3_algorithm/7_summary/4">
 <h2>We label each edge of the lock graph with</h2>
 
 <ul>
@@ -1314,64 +1334,64 @@ the cycle.</p>
 </div><div class="slide" data-transition="none"><div class="content" ref="4_d2/3_algorithm/7_summary/5">
 <h2>To reduce false positives, we ignore a cycle if...</h2>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/6">
+</div><div class="slide" data-transition="none"><div class="content small centered-code" ref="4_d2/3_algorithm/7_summary/6">
 <h2>Any two edges are in the same thread</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-      A.lock();
-        B.lock();
-        B.unlock();
-      A.unlock();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+  A.lock();
+    B.lock();
+    B.unlock();
+  A.unlock();
 
-      B.lock();
-        A.lock();
-        A.unlock();
-      B.unlock();
-    });</code></pre>
+  B.lock();
+    A.lock();
+    A.unlock();
+  B.unlock();
+});</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/7">
+</div><div class="slide" data-transition="none"><div class="content small centered-code" ref="4_d2/3_algorithm/7_summary/7">
 <h2>Any two edges share common "gatelocks"</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B, G;
-    thread t1([&amp;] {
-      G.lock();
-        A.lock();
-          B.lock();
-          B.unlock();
-        A.unlock();
-      G.unlock();
-    });
+<pre class="sh_cpp"><code>mutex A, B, G;
+thread t1([&amp;] {
+  G.lock();
+    A.lock();
+      B.lock();
+      B.unlock();
+    A.unlock();
+  G.unlock();
+});
 
-    thread t2([&amp;] {
-      G.lock();
-        B.lock();
-          A.lock();
-          A.unlock();
-        B.unlock();
-      G.unlock();
-    });</code></pre>
+thread t2([&amp;] {
+  G.lock();
+    B.lock();
+      A.lock();
+      A.unlock();
+    B.unlock();
+  G.unlock();
+});</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content small" ref="4_d2/3_algorithm/7_summary/8">
+</div><div class="slide" data-transition="none"><div class="content small centered-code" ref="4_d2/3_algorithm/7_summary/8">
 <h2>Any edge happens before any other edge in the cycle</h2>
 
-<pre class="sh_cpp"><code>    mutex A, B;
-    thread t1([&amp;] {
-      A.lock();
-        B.lock();
-        B.unlock();
-      A.unlock();
-    });
-    t1.join();
+<pre class="sh_cpp"><code>mutex A, B;
+thread t1([&amp;] {
+  A.lock();
+    B.lock();
+    B.unlock();
+  A.unlock();
+});
+t1.join();
 
-    thread t2([&amp;] {
-      B.lock();
-        A.lock();
-        A.unlock();
-      B.unlock();
-    });</code></pre>
+thread t2([&amp;] {
+  B.lock();
+    A.lock();
+    A.unlock();
+  B.unlock();
+});</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/4_roadmap/1">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/4_roadmap/1">
 <h1>Limitations and drawbacks</h1>
 
 <ul>
@@ -1380,7 +1400,7 @@ the cycle.</p>
 <li>Current implementation is immature</li>
 </ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content smbullets incremental" ref="4_d2/4_roadmap/2">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="4_d2/4_roadmap/2">
 <h1>Roadmap</h1>
 
 <ul>
@@ -1403,83 +1423,83 @@ to a windows machine.</p>
 </code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection small" ref="5_dyno/1">
-<h1><code>dyno</code>: a DSEL for dynamic analysis</h1>
+<h1><code>dyno</code>: a dynamic analysis library</h1>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="5_dyno/2">
 <h2>This is <strong>very</strong> experimental, so we won't go in depth</h2>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="5_dyno/3">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="5_dyno/3">
 <h1>Idea</h1>
 
 <ul>
 <li>Events are generated by a program and recorded</li>
 <li>Custom actions can be bound to these events</li>
 <li>Events can be loaded conveniently to analyze a program trace</li>
-<li>Use a DSEL to make it easy</li>
 </ul>
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="5_dyno/4">
 <h2>First, define an event</h2>
 
-<pre class="sh_cpp"><code>    namespace tags {
-      struct acquire;
-      struct lock_id;
-    }
+<pre class="sh_cpp"><code>namespace tags {
+  struct acquire;
+  struct lock_id;
+}
 
-    typedef event&lt;tags::acquire,
-              records&lt;call_stack&gt;,
-              records&lt;thread_id&gt;,
-              records&lt;
-               custom_info&lt;tags::lock_id, unsigned&gt;
-              &gt;
-            &gt; acquire_event;</code></pre>
+typedef event&lt;tags::acquire,
+          records&lt;call_stack&gt;,
+          records&lt;thread_id&gt;,
+          records&lt;
+           custom_info&lt;tags::lock_id, unsigned&gt;
+          &gt;
+        &gt; acquire_event;</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="5_dyno/5">
 <h2>Then, bundle the events into a <code>framework</code></h2>
 
-<pre class="sh_cpp"><code>    typedef framework&lt;
-              events&lt;
-                acquire_event, release_event,
-                start_event, join_event
-              &gt;,
-              backend&lt;save_on_filesystem&gt;
-            &gt; d2_framework_t;
+<pre class="sh_cpp"><code>typedef framework&lt;
+          events&lt;
+            acquire_event, release_event,
+            start_event, join_event
+          &gt;,
+          backend&lt;save_on_filesystem&gt;
+        &gt; d2_framework_t;
 
-    static d2_framework_t d2_framework;</code></pre>
+static d2_framework_t d2_framework;</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="5_dyno/6">
 <h2>Bind actions to events as wanted</h2>
 
-<pre class="sh_cpp"><code>    dyno::on&lt;tags::acquire&gt;(d2_framework,
-        [](acquire_event e) {
-          // whatever
-        });</code></pre>
+<pre class="sh_cpp"><code>dyno::on&lt;tags::acquire&gt;(d2_framework,
+    [](acquire_event e) {
+      // whatever
+    });</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="5_dyno/7">
 <h2>Generate events in your code</h2>
 
-<pre class="sh_cpp"><code>    struct mutex {
-      void lock() {
-        dyno::generate&lt;tags::acquire&gt;(
-                      d2_framework, *this);
-      }
-    };</code></pre>
+<pre class="sh_cpp"><code>struct mutex {
+  void lock() {
+    dyno::generate&lt;tags::acquire&gt;(d2_framework, lock_id_);
+  }
+
+private:
+  unsigned lock_id_;
+};</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content small" ref="5_dyno/8">
 <h2>Load events from a source to perform your custom analysis without hassle</h2>
 
-<pre class="sh_cpp"><code>    struct populate_lock_graph {
-      void operator()(acquire_event e) const;
-      void operator()(release_event e) const;
+<pre class="sh_cpp"><code>struct populate_lock_graph {
+  void operator()(acquire_event e) const;
+  void operator()(release_event e) const;
 
-      template &lt;typename AnyOtherEvent&gt;
-      void operator()(AnyOtherEvent) const;
-    };
+  template &lt;typename AnyOtherEvent&gt;
+  void operator()(AnyOtherEvent) const;
+};
 
-    dyno::load_events("some_directory",
-                      populate_lock_graph());</code></pre>
+dyno::load_events("some_directory", populate_lock_graph());</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content bullets incremental" ref="5_dyno/9">
+</div><div class="slide" data-transition="none"><div class="content smbullets" ref="5_dyno/9">
 <p class="notes">Explain how the project was started by witnessing that much of the
        code from d2 could be generally useful for dynamic analysis.</p>
 
