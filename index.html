@@ -34,8 +34,6 @@
     
       <script type="text/javascript" src="./js/sh_lang/sh_cpp.min.js"></script>
     
-      <script type="text/javascript" src="./js/sh_lang/sh_c.min.js"></script>
-    
   
 
   
@@ -358,15 +356,17 @@ public:
 thread&amp; operator=(thread&amp;&amp; other);
 friend void swap(thread&amp; a, thread&amp; b);</code></pre>
 </div>
-</div><div class="slide" data-transition="none"><div class="content centered-code" ref="4_d2/2_design_and_usage/12">
-<h2>Low level C API (for eventual bindings)</h2>
+</div><div class="slide" data-transition="none"><div class="content centered-code smaller" ref="4_d2/2_design_and_usage/12">
+<h2>Low level API (for eventual bindings)</h2>
 
-<pre class="sh_c"><code>d2_notify_acquire(thread, lock)
-d2_notify_release(thread, lock)
-d2_notify_recursive_acquire(thread, lock)
-d2_notify_recursive_release(thread, lock)
-d2_notify_start(parent, child)
-d2_notify_join(parent, child)</code></pre>
+<pre class="sh_cpp"><code>namespace d2 { namespace core {
+  notify_acquire(std::size_t thread, std::size_t lock);
+  notify_release(std::size_t thread, std::size_t lock);
+  notify_recursive_acquire(std::size_t thread, std::size_t lock);
+  notify_recursive_release(std::size_t thread, std::size_t lock);
+  notify_start(std::size_t parent, std::size_t child);
+  notify_join(std::size_t parent, std::size_t child);
+}}</code></pre>
 </div>
 </div><div id="slide-filesystem" class="slide" data-transition="none"><div class="content" ref="4_d2/2_design_and_usage/13">
 <h2>Events are generated and dispatched to the filesystem</h2>
