@@ -1406,21 +1406,8 @@ thread t2([&amp;] {
 <ul>
 <li>Support a wider set of synchronization primitives</li>
 <li>Provide integration with more libraries</li>
-<li>Reduce false positives further (I have some ideas)</li>
+<li>Further reduce false positives (I have some ideas)</li>
 </ul>
-</div>
-</div><div class="slide" data-transition="none"><div class="content commandline" ref="4_d2/4_roadmap/3">
-<p class="notes">Right now, the integration is only with pthreads because I lack access
-to a windows machine.</p>
-
-<h2>Want to try it?</h2>
-
-<pre><code><code class="command">$ cd ${boost_root}</code>
-<code class="result">
-</code><code class="command">$ patch -p1 &lt; ${d2_root}/integrations/boost/1_53_00.diff</code>
-<code class="result">
-</code><code class="command">$ ./bjam -j64 # :)</code>
-</code></pre>
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection small" ref="5_dyno/1">
 <h1><code>dyno</code>: a dynamic analysis library</h1>
