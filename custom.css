@@ -13,9 +13,9 @@ h1, h2, h3, h4, h5, h6 {
 #preso, .slide {
   width: 100%;
   background-color: #eee;
-  box-shadow: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 .subsection h1 {
@@ -112,6 +112,15 @@ code {
 }
 #slide-filesystem .content h1, #slide-filesystem .content h2 {
   color: #FFF;
+}
+
+@media (max-width: 979px) {
+  body {
+    font-size: 80%;
+  }
+  .content > pre {
+    font-size: 200%;
+  }
 }
 
 /* Remove the darkish border around each slide */
