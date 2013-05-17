@@ -44,28 +44,15 @@
 
 
 <!SLIDE>
-# Why are they so vicious?
-
-
-<!SLIDE>
-## Non deterministic
-
-
-<!SLIDE>
 .notes Very few variations in thread scheduling usually happens for different
 runs of the same code in the same conditions. For this reason, odds are that
 rare deadlocks still make it to production and only happen under "extreme"
 conditions.
 
-## Often uncaught by unit tests
-
-
-<!SLIDE>
-## Difficult to reproduce
-
-
-<!SLIDE>
-## Finding them requires thinking about parallel executions, which is difficult
+## Why are they so vicious?
+* Non deterministic
+* Often uncaught by unit tests
+* Difficult to reproduce
 
 
 <!SLIDE>

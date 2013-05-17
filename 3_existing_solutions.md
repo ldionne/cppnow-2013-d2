@@ -11,8 +11,7 @@
 <!SLIDE smbullets>
 ## Determine a hierarchy among locks and respect it
 
-* Error-prone
-* Not realistic for non-trivial programs
+* Hard to enforce for non-trivial programs
 
 
 <!SLIDE smbullets>
