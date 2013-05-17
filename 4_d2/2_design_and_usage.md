@@ -179,16 +179,18 @@
     friend void swap(thread& a, thread& b);
 
 
-<!SLIDE centered-code>
-## Low level C API (for eventual bindings)
+<!SLIDE centered-code smaller>
+## Low level API (for eventual bindings)
 
-    @@@ c
-    d2_notify_acquire(thread, lock)
-    d2_notify_release(thread, lock)
-    d2_notify_recursive_acquire(thread, lock)
-    d2_notify_recursive_release(thread, lock)
-    d2_notify_start(parent, child)
-    d2_notify_join(parent, child)
+    @@@ cpp
+    namespace d2 { namespace core {
+      notify_acquire(std::size_t thread, std::size_t lock);
+      notify_release(std::size_t thread, std::size_t lock);
+      notify_recursive_acquire(std::size_t thread, std::size_t lock);
+      notify_recursive_release(std::size_t thread, std::size_t lock);
+      notify_start(std::size_t parent, std::size_t child);
+      notify_join(std::size_t parent, std::size_t child);
+    }}
 
 
 <!SLIDE #slide-filesystem>
