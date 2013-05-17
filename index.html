@@ -157,26 +157,20 @@ thread t3([&amp;] {
 <h1>Same principle but harder to catch</h1>
 </div>
 </div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/5">
-<h1>Why are they so vicious?</h1>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/6">
-<h2>Non deterministic</h2>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/7">
 <p class="notes">Very few variations in thread scheduling usually happens for different
 runs of the same code in the same conditions. For this reason, odds are that
 rare deadlocks still make it to production and only happen under "extreme"
 conditions.</p>
 
-<h2>Often uncaught by unit tests</h2>
+<h2>Why are they so vicious?</h2>
+
+<ul>
+<li>Non deterministic</li>
+<li>Often uncaught by unit tests</li>
+<li>Difficult to reproduce</li>
+</ul>
 </div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/8">
-<h2>Difficult to reproduce</h2>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/9">
-<h2>Finding them requires thinking about parallel executions, which is difficult</h2>
-</div>
-</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/10">
+</div><div class="slide" data-transition="none"><div class="content" ref="2_lock_order_inconsistencies/6">
 <h2>We would like to detect them automatically and before they happen</h2>
 </div>
 </div><div class="slide" data-transition="none"><div class="content subsection" ref="3_existing_solutions/1">
@@ -193,8 +187,7 @@ conditions.</p>
 <h2>Determine a hierarchy among locks and respect it</h2>
 
 <ul>
-<li>Error-prone</li>
-<li>Not realistic for non-trivial programs</li>
+<li>Hard to enforce for non-trivial programs</li>
 </ul>
 </div>
 </div><div class="slide" data-transition="none"><div class="content smbullets" ref="3_existing_solutions/4">
