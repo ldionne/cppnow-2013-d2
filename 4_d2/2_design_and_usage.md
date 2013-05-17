@@ -170,7 +170,7 @@
     };
 
 
-<!SLIDE centered-code>
+<!SLIDE>
 ## Don't forget to modify these
 
     @@@ cpp
@@ -179,7 +179,7 @@
     friend void swap(thread& a, thread& b);
 
 
-<!SLIDE centered-code smaller>
+<!SLIDE small>
 ## Low level API (for eventual bindings)
 
     @@@ cpp
