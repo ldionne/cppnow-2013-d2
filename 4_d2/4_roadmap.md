@@ -3,7 +3,6 @@
 
 * Requires modifying existing code
 * No integration with an IDE
-* Current implementation is immature
 
 
 <!SLIDE smbullets>
