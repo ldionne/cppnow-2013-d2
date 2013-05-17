@@ -10,10 +10,10 @@
 # Roadmap
 * Support a wider set of synchronization primitives
 * Provide integration with more libraries
-* Reduce false positives further (I have some ideas)
+* Further reduce false positives (I have some ideas)
 
 
-<!SLIDE commandline small>
+<!SLIDE commandline small skip>
 .notes Right now, the integration is only with pthreads because I lack access
 to a windows machine.
 
