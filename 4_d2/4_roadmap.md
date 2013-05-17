@@ -13,7 +13,7 @@
 * Reduce false positives further (I have some ideas)
 
 
-<!SLIDE commandline>
+<!SLIDE commandline small>
 .notes Right now, the integration is only with pthreads because I lack access
 to a windows machine.
 
